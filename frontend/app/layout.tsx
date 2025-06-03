@@ -1,6 +1,6 @@
-import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import { geistSans, geistMono, Niradei } from "./fonts/fonts";
+import ThemeProviderWrapper from "./ThemeProviderWrapper";
 
 export default function RootLayout({
   children,
@@ -12,9 +12,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased ${Niradei.className}`}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ThemeProviderWrapper>
           {children}
-        </ThemeProvider>
+        </ThemeProviderWrapper>
       </body>
     </html>
   );
