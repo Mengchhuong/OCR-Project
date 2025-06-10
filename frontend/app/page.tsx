@@ -22,12 +22,19 @@ export default function Home() {
       setShowResult(true);
     }, 2000);
   };
+  const handleUploadComplete = (newFiles: [string, number][]) => {
+    setUploadedFiles((prev) => [...prev, ...newFiles]);
+  };
   return (
-    <div className="min-h-screen flex flex-col ">
+    <div className="min-h-screen flex flex-col dark:bg-[#121212]">
       {/* Navbar */}
       <Navbar />
       {/* Hero Section */}
-      <div className="bg-[#142544] font-bold flex flex-col items-center justify-center text-center space-y-3 text-white pt-[30px] pb-[90px] mt-20 mb-55">
+      <div
+        className={`bg-[#142544] font-bold flex flex-col items-center justify-center text-center space-y-3 text-white pt-[30px] mt-20 ${
+          showResult == false ? "pb-[90px] mb-55" : "pb-[30px]"
+        }`}
+      >
         <p className="text-[34px]">ការប្រែក្លាយឯកសារខ្មែរទៅជាឌីជីថល</p>
         <p className="text-[34px]">
           Automating the Digitization of Khmer Documents
@@ -37,7 +44,9 @@ export default function Home() {
         </p>
       </div>
       {/* Pass handler to FileUpload */}
-      <FileUpload onScan={() => {}} onUploadComplete={setUploadedFiles} />
+      {showResult == false && (
+        <FileUpload onScan={() => {}} onUploadComplete={handleUploadComplete} />
+      )}
       {/* Show uploaded files */}
       <div className="flex-grow px-[144px]">
         {uploadedFiles.length > 0 && showResult == false && (
@@ -48,7 +57,7 @@ export default function Home() {
                 {uploadedFiles.map(([filename, size], idx) => (
                   <li
                     key={idx}
-                    className="bg-gray-100 rounded px-4 py-5 flex justify-between items-center"
+                    className="bg-gray-100 dark:bg-[#121212] border-2 border-white rounded px-4 py-5 flex justify-between items-center"
                   >
                     <div className="flex items-center space-x-4">
                       <FileText className="w-6 h-6"></FileText>

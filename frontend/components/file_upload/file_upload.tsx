@@ -1,11 +1,13 @@
 "use client";
-import React, { useRef } from "react";
-import Image from "next/image";
+import React, { useRef, useState } from "react";
+import { Image } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { uploadFiles } from "@/lib/api";
 import { Upload, Camera } from "lucide-react";
+
 /**
  * FileUpload component allows users to upload multiple files.
+ * - Supports drag and drop or click to upload.
  * - Calls onUploadComplete with an array of [filename, filesize] after upload.
  * - Calls onScan when the Scan button is clicked.
  */
@@ -17,6 +19,7 @@ export default function FileUpload({
   onUploadComplete?: (files: [string, number][]) => void;
 }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [dragActive, setDragActive] = useState(false);
 
   // Triggers the hidden file input when Upload button is clicked
   const handleUploadClick = () => {
@@ -31,14 +34,49 @@ export default function FileUpload({
     if (onUploadComplete) {
       onUploadComplete(result);
     }
+    // Reset input value so selecting the same file again will trigger onChange
+    e.target.value = "";
+  };
+
+  // Handles files dropped into the drop area
+  const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setDragActive(false);
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const result = await uploadFiles(e.dataTransfer.files);
+      if (onUploadComplete) {
+        onUploadComplete(result);
+      }
+    }
+  };
+
+  // Handles drag over event
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setDragActive(true);
+  };
+
+  // Handles drag leave event
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setDragActive(false);
   };
 
   return (
     <div className="absolute top-[295px] left-0 right-0 px-[144px]">
-      <div className="bg-white rounded-[12px] shadow-lg p-6 space-y-4">
-        <div className="border-1 border-black rounded-[12px] py-[24px] border-dotted flex flex-col items-center justify-center space-y-3">
-          <Image src="/icons/Image.svg" alt="Logo" width={48} height={48} />
-          <p className="text-[16px] text-[#142544] ml-4 font-normal text-center">
+      <div className="bg-white dark:bg-[#212121] rounded-[12px] shadow-lg p-6 space-y-4">
+        <div
+          className={`border-2 border-black dark:border-white rounded-[12px] py-[24px] border-dotted flex flex-col items-center justify-center space-y-3 transition-colors cursor-pointer ${
+            dragActive ? "bg-blue-100 dark:bg-blue-900" : ""
+          }`}
+          onClick={handleUploadClick}
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDragEnd={handleDragLeave}
+        >
+          <Image className="w-[222.2] h-[40] text-[#142544] dark:text-white" />
+          <p className="text-[16px] text-[#142544] ml-4 font-normal text-center dark:text-white">
             Drag and drop your file here, or click to browse <br />
             Supported formats: JPG, PNG, PDF | Max size: 10MB
           </p>
@@ -55,9 +93,12 @@ export default function FileUpload({
               variant="default"
               type="button"
               size={"icon"}
-              onClick={handleUploadClick}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleUploadClick();
+              }}
             >
-              <Upload className="stroke-3"></Upload>
+              <Upload className="stroke-3" />
               Upload
             </Button>
             <Button
@@ -67,7 +108,7 @@ export default function FileUpload({
               type="button"
               onClick={onScan}
             >
-              <Camera className="stroke-3"></Camera>
+              <Camera className="stroke-3" />
               Scan
             </Button>
           </div>

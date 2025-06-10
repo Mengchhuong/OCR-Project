@@ -4,7 +4,9 @@ export default function UploadProcess() {
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
       <div className="p-8 bg-white rounded-[12px] w-[50%]">
-        <p className="text-[24px] font-bold">Generating OCR Result...</p>
+        <p className="text-[24px] font-bold dark:text-black">
+          Generating OCR Result...
+        </p>
         <p className="text-[18px] text-[#142544]/50 mt-4">
           Analyzing Khmer script from uploaded image(s)...
         </p>

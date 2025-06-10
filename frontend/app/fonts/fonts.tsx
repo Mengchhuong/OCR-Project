@@ -13,24 +13,24 @@ export const geistMono = Geist_Mono({
 });
 
 export const cadtMonoDisplay = localFont({
-  src: '../../public/fonts/CADTMonoDisplay-Regular.ttf',
+  src: "../../public/fonts/CADTMonoDisplay-Regular.ttf",
 });
 
 export const Niradei = localFont({
   src: [
     {
-      path: '../../public/fonts/Niradei-Regular.ttf',
-      weight: '400',
-      style: 'normal',
+      path: "../../public/fonts/Niradei-Regular.ttf",
+      weight: "400",
+      style: "normal",
     },
     {
-      path: '../../public/fonts/Niradei-Bold.ttf',
-      weight: '700',
-      style: 'normal',
+      path: "../../public/fonts/Niradei-Bold.ttf",
+      weight: "700",
+      style: "normal",
     },
   ],
-  variable: '--font-niradei',
-  display: 'swap',
+  variable: "--font-niradei",
+  display: "swap",
 });
 
 export const metadata: Metadata = {

@@ -19,7 +19,7 @@ export default function ModeToggle() {
       <Button
         variant="ghost"
         size="icon"
-        className="text-black cursor-pointer hover:text-[#FF4438] duration-300 relative h-10 w-10 rounded-full p-0 transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent dark:text-white"
+        className="text-black cursor-pointer hover:text-[#FF4438] dark:hover:text-[#FF4438] duration-300 relative h-10 w-10 rounded-full p-0 transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent dark:text-white"
         onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
       >
         <SunIcon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-150 transition-all dark:-rotate-90 dark:scale-0" />

@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Table,
   TableBody,
@@ -6,9 +8,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Download } from "lucide-react";
+import { Download, RefreshCcw } from "lucide-react";
 import React, { useState } from "react";
 import { Button } from "../ui/button";
+import DetailResult from "./detail_result";
+
 const data = [
   {
     filename: "កៅ_វិចិត្រ-ឯកសារ.pdf",
@@ -25,6 +29,21 @@ const data = [
 export default function GeneratedResult() {
   const [selected, setSelected] = useState<number[]>([]);
   const allSelected = selected.length === data.length;
+  const [detailText, setDetailText] = useState<string | null>(null);
+
+  if (detailText) {
+    return (
+      <DetailResult
+        DetailText={detailText}
+        onBack={() => setDetailText(null)}
+      />
+    );
+  }
+
+  const onFileClick = (fileName: string) => {
+    const found = data.find((row) => row.filename === fileName);
+    if (found) setDetailText(found.extractedText);
+  };
 
   const handleSelectAll = () => {
     setSelected(allSelected ? [] : data.map((_, idx) => idx));
@@ -33,13 +52,6 @@ export default function GeneratedResult() {
   const handleSelect = (idx: number) => {
     setSelected((prev) =>
       prev.includes(idx) ? prev.filter((i) => i !== idx) : [...prev, idx]
-    );
-  };
-
-  const onFileClick = (fileName: String) => {
-    console.log("File " + fileName + " clicked");
-    alert(
-      `You clicked on the file: ${fileName}. This is where you would handle the file click event, such as opening or downloading the file.`
     );
   };
 
@@ -72,7 +84,7 @@ export default function GeneratedResult() {
             {data.map((row, idx) => (
               <TableRow
                 key={row.filename}
-                className=" cursor-pointer"
+                className="cursor-pointer"
                 onClick={() => onFileClick(row.filename)}
               >
                 <TableCell>
@@ -100,7 +112,7 @@ export default function GeneratedResult() {
                     aria-label="Download"
                     onClick={(e) => {
                       e.stopPropagation();
-                      console.log(`Downloading ${row.filename}`);
+                      // Download logic here
                       alert(`Downloading ${row.filename}`);
                     }}
                   >
@@ -112,7 +124,7 @@ export default function GeneratedResult() {
           </TableBody>
         </Table>
       </div>
-      <div className="flex justify-center tems-center space-x-4">
+      <div className="flex justify-center items-center space-x-4">
         <Button
           className="mt-4 w-[20%]"
           variant="default"
@@ -130,6 +142,20 @@ export default function GeneratedResult() {
         >
           <Download className="mr-1 w-9 h-9 stroke-3"></Download>
           Download Json
+        </Button>
+      </div>
+      <div className="flex justify-center items-center">
+        <Button
+          className="mt-4 w-[20%]"
+          variant="default"
+          size={"icon"}
+          type="button"
+          onClick={() => {
+            window.location.reload();
+          }}
+        >
+          <RefreshCcw className="mr-1 w-9 h-9 stroke-3"></RefreshCcw>
+          Generate New
         </Button>
       </div>
     </div>
