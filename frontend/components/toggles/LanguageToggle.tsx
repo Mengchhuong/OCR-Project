@@ -12,7 +12,7 @@ export default function LanguageToggle() {
 
   return (
     <button
-      className={`hover:text-[#FF4438] duration-300 cursor-pointer font-bold px-2 py-1 rounded text-black c`}
+      className={`hover:text-[#FF4438] duration-300 cursor-pointer font-bold px-2 py-1 rounded text-black dark:text-white`}
       onClick={toggleLanguage}
     >
       {active === "en" ? "English" : "Khmer"}
