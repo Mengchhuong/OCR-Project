@@ -4,16 +4,18 @@ import { ChevronLeft, Copy, Download } from "lucide-react";
 import { Button } from "../ui/button";
 
 export default function DetailResult({
+  FileTitle,
   DetailText = " ប្រទេសកម្ពុជា មានប្រវត្តិសាស្ត្រដ៏យូរលង់ ហើយមានអរិយធម៌ដ៏រុងរឿង។ខ្ញុំសូមជូនពរឱ្យអ្នកទាំងអស់គ្នាមានសុខភាពល្អ និងសុភមង្គលគ្រប់ពេលវេលា។ប្រាសាទអង្គរវត្ត គឺជានិមិត្តរូបនៃប្រទេសកម្ពុជានិងជាសំណង់ស្ថាបត្យកម្មដ៏អស្ចារ្យបំផុតមួយនៅលើពិភពលោក។",
   onBack,
 }: {
+  FileTitle?: string;
   DetailText?: string;
   onBack?: () => void;
 }) {
   return (
     <div>
-      <div className="border-2 border-[#142544]/30 rounded-[12]">
-        <div className="flex flex-row justify-between border-b-2 border-[#142544]/30 pb-3">
+      <div className="border-2 border-[#142544]/30 rounded-[12] dark:border-white">
+        <div className="flex flex-row justify-between border-b-2 border-[#142544]/30 pb-3 dark:border-white">
           <div className="flex items-center space-x-2 py-4 px-3">
             <div
               className="w-7 h-7 flex items-center hover:bg-gray-300 cursor-po rounded-4xl cursor-pointer"
@@ -22,7 +24,7 @@ export default function DetailResult({
               <ChevronLeft className="mr-1 w-6 h-6 stroke-3"></ChevronLeft>
             </div>
             <span className="text-[16px] font-bold ml-2">
-              កៅ_វិចិត្រ-ឯកសារ.pdf
+              {FileTitle || "Detail Result"}
             </span>
           </div>
           <Button

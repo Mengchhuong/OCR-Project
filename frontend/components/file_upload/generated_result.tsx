@@ -13,20 +13,23 @@ import React, { useState } from "react";
 import { Button } from "../ui/button";
 import DetailResult from "./detail_result";
 
-const data = [
-  {
-    filename: "កៅ_វិចិត្រ-ឯកសារ.pdf",
-    extractedText: "ប្រទេសកម្ពុជា មានប្រវត្តិសាស្ត្រដ៏យូរលង់ ហើយមា...",
-    confidence: 98,
-  },
-  {
-    filename: "example2.pdf",
-    extractedText: "សូមស្វាគមន៍មកកាន់ប្រព័ន្ធ...",
-    confidence: 95,
-  },
-];
+export default function GeneratedResult({
+  uploadedFile,
+}: {
+  uploadedFile?: File[];
+}) {
+  const extractedTextRandom = [
+    "ប្រទេសកម្ពុជា មានប្រវត្តិសាស្ត្រដ៏យូរលង់ ហើយមានអរិយធម៌បុរាណដ៏លេចធ្លោ ដែលបានសាងសង់វិមានប្រាសាទជាច្រើន ដូចជា ប្រាសាទអង្គរវត្ត និងអង្គរធំ។ អរិយធម៌ខ្មែរបានទទួលឥទ្ធិពលពីសាសនាព្រាង និងសាសនាពុទ្ធ តាំងពីសតវត្សទី១។",
+    "សូមស្វាគមន៍មកកាន់ប្រព័ន្ធប្រែក្លាយឯកសារជាអក្សរខ្មែរ។ ប្រព័ន្ធនេះត្រូវបានរចនាឡើងដើម្បីជួយអ្នកក្នុងការបម្លែងឯកសារសរសេរជារូបភាព ឬ PDF ទៅជាអក្សរដែលអាចកែប្រែបានយ៉ាងងាយស្រួល។ វាអាចជួយអ្នកក្នុងការបញ្ចូលឯកសារទៅក្នុងប្រព័ន្ធឌីជីថល។",
+    "ការប្រែក្លាយឯកសារខ្មែរទៅជាឌីជីថល គឺជាដំណើរការដែលមានសារៈសំខាន់ ដើម្បីរក្សានិងបន្តអក្សរសាស្ត្រខ្មែរ។ វាជួយក្នុងការសន្សំទុកឯកសារបែបប្រវត្តិសាស្ត្រផ្សេងៗ និងធ្វើឱ្យអាចចូលដំណើរការផលិតផលវិជ្ជាសាស្ត្របានយ៉ាងរហ័ស។",
+    "ប្រព័ន្ធនេះអាចជួយអ្នកក្នុងការប្រែក្លាយឯកសារដែលមានអត្ថបទខ្មែរ ឱ្យក្លាយជាអត្ថបទដែលអាចកែសម្រួលបាន។ វាផ្តល់ជូននូវភាពងាយស្រួលក្នុងការស្វែងរក និងកែប្រែអត្ថបទ ហើយគាំទ្រការពង្រឹងប្រព័ន្ធឌីជីថលនៅក្នុងវិស័យការងាររដ្ឋ និងឯកជន។",
+  ];
 
-export default function GeneratedResult() {
+  const data = (uploadedFile ?? []).map((file, idx) => ({
+    filename: file.name,
+    extractedText: extractedTextRandom[idx % extractedTextRandom.length],
+    confidence: Math.floor(Math.random() * 100) + 1,
+  }));
   const [selected, setSelected] = useState<number[]>([]);
   const allSelected = selected.length === data.length;
   const [detailText, setDetailText] = useState<string | null>(null);
@@ -35,6 +38,9 @@ export default function GeneratedResult() {
     return (
       <DetailResult
         DetailText={detailText}
+        FileTitle={
+          data.find((row) => row.extractedText === detailText)?.filename
+        }
         onBack={() => setDetailText(null)}
       />
     );
@@ -101,7 +107,11 @@ export default function GeneratedResult() {
                   />
                 </TableCell>
                 <TableCell className="py-5">{row.filename}</TableCell>
-                <TableCell className="py-5">{row.extractedText}</TableCell>
+                <TableCell className="py-5">
+                  {row.extractedText.length > 60
+                    ? row.extractedText.slice(0, 60) + "..."
+                    : row.extractedText}
+                </TableCell>
                 <TableCell className="text-right py-5">
                   {row.confidence}%
                 </TableCell>
