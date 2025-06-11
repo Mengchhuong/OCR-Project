@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Upload, Camera } from "lucide-react";
 import UploadProcess from "./upload_process";
 import { uploadFileWithProgress } from "@/lib/api";
+import CameraCapture from "./camera_capture";
 /**
  * FileUpload component allows users to upload multiple files.
  * - Supports drag and drop or click to upload.
@@ -21,6 +22,7 @@ export default function FileUpload({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [dragActive, setDragActive] = useState(false);
   const [showUploadProcess, setShowUploadProcess] = useState(false);
+  const [showCamera, setShowCamera] = useState(false);
   const [progress, setProgress] = useState({
     current: 0,
     total: 0,
@@ -98,6 +100,15 @@ export default function FileUpload({
           percent={progress.percent}
         />
       )}
+      {showCamera && (
+        <CameraCapture
+          onSave={(file) => {
+            if (onUploadComplete) onUploadComplete([file]);
+            setShowCamera(false);
+          }}
+          onClose={() => setShowCamera(false)}
+        />
+      )}
       <div className="absolute top-[295px] left-0 right-0 px-[144px]">
         <div className="bg-white dark:bg-[#212121] rounded-[12px] shadow-lg p-6 space-y-4">
           <div
@@ -142,7 +153,10 @@ export default function FileUpload({
                 variant="default"
                 size={"icon"}
                 type="button"
-                onClick={onScan}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowCamera(true); // Open camera on click
+                }}
               >
                 <Camera className="stroke-3" />
                 Scan

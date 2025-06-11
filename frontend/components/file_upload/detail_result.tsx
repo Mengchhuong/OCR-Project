@@ -1,7 +1,14 @@
 "use client";
 
-import { ChevronLeft, Copy, Download } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronLeft,
+  Copy,
+  Download,
+  RefreshCcw,
+} from "lucide-react";
 import { Button } from "../ui/button";
+import { useState } from "react";
 
 export default function DetailResult({
   FileTitle,
@@ -12,6 +19,7 @@ export default function DetailResult({
   DetailText?: string;
   onBack?: () => void;
 }) {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   return (
     <div>
       <div className="border-2 border-[#142544]/30 rounded-[12] dark:border-white">
@@ -42,24 +50,59 @@ export default function DetailResult({
         </div>
         <div className="p-[20]">{DetailText}</div>
       </div>
-      <div className="flex justify-center items-center space-x-4">
+      <div className="flex justify-center items-center space-x-12">
+        <div className="w-[20%] justify-end items-end relative">
+          <div className="flex flex-row items-end">
+            <Button
+              className="mt-4 w-[100%] rounded-r-[0]"
+              variant="default"
+              size={"icon"}
+              type="button"
+              onClick={() => {}}
+            >
+              <Download className="mr-1 w-9 h-9 stroke-3"></Download>
+              Download .txt
+            </Button>
+            <span
+              className="flex items-center justify-center px-2 h-9 bg-[#142544] dark:bg-[#FF4438] dark:hover:bg-[#142544]/90 hover:bg-[#142544]/90 rounded-r-[12px] cursor-pointer relative"
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+              onMouseDown={(e) => e.preventDefault()}
+            >
+              <ChevronDown className="w-5 h-5 text-white cursor-pointer" />
+            </span>
+          </div>
+          {dropdownOpen == true && (
+            <div
+              className="absolute mt-1 bg-white dark:text-[#142544] rounded-2xl justify-center items-center shadow-lg"
+              style={{
+                top: "100%",
+                left: 0,
+                width: "100%",
+                zIndex: 10,
+              }}
+            >
+              <div className="flex flex-col space-y-2">
+                <span className="p-2 text-center dark:hover:duration-400 dark:hover:bg-[#142544]  hover:bg-[#FF4438] duration-400 font-bold hover:text-white cursor-pointer rounded-t-2xl">
+                  Download .txt
+                </span>
+                <span className="p-2 text-center dark:hover:duration-400 dark:hover:bg-[#142544]  hover:bg-[#FF4438] duration-400 font-bold hover:text-white cursor-pointer rounded-b-2xl">
+                  Download .json
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
         <Button
           className="mt-4 w-[20%]"
           variant="default"
           size={"icon"}
           type="button"
+          onClick={() => {
+            window.location.reload();
+          }}
         >
-          <Download className="mr-1 w-9 h-9 stroke-3"></Download>
-          Download Txt
-        </Button>
-        <Button
-          className="mt-4 w-[20%]"
-          variant="default"
-          size={"icon"}
-          type="button"
-        >
-          <Download className="mr-1 w-9 h-9 stroke-3"></Download>
-          Download Json
+          <RefreshCcw className="mr-1 w-9 h-9 stroke-3"></RefreshCcw>
+          Regenerate
         </Button>
       </div>
     </div>

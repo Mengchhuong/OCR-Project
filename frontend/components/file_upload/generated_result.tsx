@@ -8,8 +8,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Download, RefreshCcw } from "lucide-react";
-import React, { useState } from "react";
+import { Download, RefreshCcw, ChevronDown } from "lucide-react";
+import React, { useState, useRef, useLayoutEffect } from "react";
 import { Button } from "../ui/button";
 import DetailResult from "./detail_result";
 
@@ -33,6 +33,7 @@ export default function GeneratedResult({
   const [selected, setSelected] = useState<number[]>([]);
   const allSelected = selected.length === data.length;
   const [detailText, setDetailText] = useState<string | null>(null);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   if (detailText) {
     return (
@@ -63,7 +64,7 @@ export default function GeneratedResult({
 
   return (
     <div>
-      <div className="rounded-lg border-2 border-[#142544]/30 px-5">
+      <div className="rounded-lg border-2 border-[#142544]/30 dark:border-white px-5">
         <Table className="w-full">
           <TableHeader>
             <TableRow>
@@ -117,7 +118,7 @@ export default function GeneratedResult({
                 </TableCell>
                 <TableCell className="text-right py-5 flex justify-end">
                   <button
-                    className="h-7 w-7 rounded-4xl hover:bg-gray-300 flex items-center justify-center duration-500 cursor-pointer"
+                    className="h-7 w-7 rounded-4xl hover:bg-gray-300 flex items-center justify-center duration-400 cursor-pointer"
                     type="button"
                     aria-label="Download"
                     onClick={(e) => {
@@ -134,27 +135,48 @@ export default function GeneratedResult({
           </TableBody>
         </Table>
       </div>
-      <div className="flex justify-center items-center space-x-4">
-        <Button
-          className="mt-4 w-[20%]"
-          variant="default"
-          size={"icon"}
-          type="button"
-        >
-          <Download className="mr-1 w-9 h-9 stroke-3"></Download>
-          Download Txt
-        </Button>
-        <Button
-          className="mt-4 w-[20%]"
-          variant="default"
-          size={"icon"}
-          type="button"
-        >
-          <Download className="mr-1 w-9 h-9 stroke-3"></Download>
-          Download Json
-        </Button>
-      </div>
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center items-center space-x-12">
+        <div className="w-[20%] justify-end items-end relative">
+          <div className="flex flex-row items-end">
+            <Button
+              className="mt-4 w-[100%] rounded-r-[0]"
+              variant="default"
+              size={"icon"}
+              type="button"
+              onClick={() => {}}
+            >
+              <Download className="mr-1 w-9 h-9 stroke-3"></Download>
+              Download .txt
+            </Button>
+            <span
+              className="flex items-center justify-center px-2 h-9 bg-[#142544] dark:bg-[#FF4438] dark:hover:bg-[#142544]/90 hover:bg-[#142544]/90 rounded-r-[12px] cursor-pointer relative"
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+              onMouseDown={(e) => e.preventDefault()}
+            >
+              <ChevronDown className="w-5 h-5 text-white cursor-pointer" />
+            </span>
+          </div>
+          {dropdownOpen == true && (
+            <div
+              className="absolute mt-1 bg-white dark:text-[#142544] rounded-2xl justify-center items-center shadow-lg"
+              style={{
+                top: "100%",
+                left: 0,
+                width: "100%",
+                zIndex: 10,
+              }}
+            >
+              <div className="flex flex-col space-y-2">
+                <span className="p-2 text-center dark:hover:duration-400 dark:hover:bg-[#142544]  hover:bg-[#FF4438] duration-400 font-bold hover:text-white cursor-pointer rounded-t-2xl">
+                  Download .txt
+                </span>
+                <span className="p-2 text-center dark:hover:duration-400 dark:hover:bg-[#142544]  hover:bg-[#FF4438] duration-400 font-bold hover:text-white cursor-pointer rounded-b-2xl">
+                  Download .json
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
         <Button
           className="mt-4 w-[20%]"
           variant="default"
@@ -165,7 +187,7 @@ export default function GeneratedResult({
           }}
         >
           <RefreshCcw className="mr-1 w-9 h-9 stroke-3"></RefreshCcw>
-          Generate New
+          Regenerate
         </Button>
       </div>
     </div>
