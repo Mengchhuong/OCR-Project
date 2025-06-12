@@ -1,4 +1,5 @@
 import { Progress } from "@/components/ui/progress";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function UploadProcess({
   current,
@@ -11,18 +12,27 @@ export default function UploadProcess({
   total: number;
   percent: number;
 }) {
+  const { language } = useLanguage();
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
       <div className="p-8 bg-white dark:bg-[#161C24] rounded-[12px] w-[50%]">
         <p className="text-[24px] font-bold dark:text-white">
           {fromGeneratedResult
-            ? "Generating OCR Result..."
-            : "Uploaded your file..."}
+            ? language == "en"
+              ? "Generating OCR Result..."
+              : "បង្កើតលទ្ធផល OCR"
+            : language == "en"
+            ? "Uploaded your file..."
+            : "បង្ហោះឯកសាររបស់អ្នក"}
         </p>
         <p className="text-[18px] text-[#142544]/50 mt-2 dark:text-white">
           {fromGeneratedResult
-            ? "Analyzing Khmer script from uploaded image(s)..."
-            : "Processing your uploaded file..."}
+            ? language == "en"
+              ? "Analyzing Khmer script from uploaded image(s)..."
+              : "វិភាគអក្សរខ្មែរពីរូបភាពដែលបានបង្ហោះ..."
+            : language == "en"
+            ? "Processing your uploaded file..."
+            : "កំពុងដំណើរការឯកសារដែលបានបង្ហោះរបស់អ្នក..."}
         </p>
         <div className="flex flex-row justify-between mt-6">
           <p className="text-[18px] text-black font-bold dark:text-white">

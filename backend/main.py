@@ -29,9 +29,9 @@ async def create_file(files: List[bytes] = File(...)):
 @app.post("/uploadfile/")
 async def create_upload_file(files: List[UploadFile] = File(...)):
     result = []
-    os.makedirs("uploads", exist_ok=True)
+    os.makedirs("database/uploads", exist_ok=True)
     for file in files:
-        file_location = f"uploads/{file.filename}"
+        file_location = f"database/uploads/{file.filename}"
         content = await file.read()
         with open(file_location, "wb") as f:
             f.write(content)

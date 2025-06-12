@@ -12,6 +12,7 @@ import { Download, RefreshCcw, ChevronDown } from "lucide-react";
 import React, { useState, useRef, useLayoutEffect, useEffect } from "react";
 import { Button } from "../ui/button";
 import DetailResult from "./detail_result";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function GeneratedResult({
   uploadedFile,
@@ -37,6 +38,7 @@ export default function GeneratedResult({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonGroupRef = useRef<HTMLDivElement>(null);
   const [dropdownWidth, setDropdownWidth] = useState<number>(0);
+  const { language } = useLanguage();
 
   useLayoutEffect(() => {
     if (buttonGroupRef.current) {
@@ -91,7 +93,7 @@ export default function GeneratedResult({
         <Table className="w-full">
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[60px]">
+              <TableHead className="w-[60px] text-center">
                 <input
                   className="w-4 h-4 cursor-pointer"
                   type="checkbox"
@@ -100,24 +102,29 @@ export default function GeneratedResult({
                   aria-label="Select all"
                 />
               </TableHead>
-              <TableHead className="font-bold py-5">Filename</TableHead>
-              <TableHead className="font-bold py-5">Extracted Text</TableHead>
-              <TableHead className="text-right font-bold py-5">
-                Confidence
+              <TableHead className="font-bold py-5 text-center">
+                {language == "en" ? "Filename" : "ឈ្មោះឯកសារ"}
               </TableHead>
-              <TableHead className="text-right font-bold py-5">
-                Action
+              <TableHead className="font-bold py-5 text-center">
+                {language == "en" ? "Extracted Text" : "​អត្ថបទដែលបានទាញយក"}
+              </TableHead>
+              <TableHead className="font-bold py-5 text-center">
+                {language == "en" ? "Confidence" : "ប្រាកដភាព"}
+              </TableHead>
+              <TableHead className="font-bold py-5 text-center">
+                {language == "en" ? "Action" : "សកម្មភាព"}
               </TableHead>
             </TableRow>
           </TableHeader>
+
           <TableBody>
             {data.map((row, idx) => (
               <TableRow
                 key={row.filename}
-                className="cursor-pointer"
+                className="cursor-pointer text-center"
                 onClick={() => onFileClick(row.filename)}
               >
-                <TableCell>
+                <TableCell className="text-center">
                   <input
                     className="w-4 h-4 cursor-pointer"
                     type="checkbox"
@@ -130,23 +137,24 @@ export default function GeneratedResult({
                     aria-label={`Select ${row.filename}`}
                   />
                 </TableCell>
-                <TableCell className="py-5">{row.filename}</TableCell>
-                <TableCell className="py-5">
+                <TableCell className="py-5 text-center">
+                  {row.filename}
+                </TableCell>
+                <TableCell className="py-5 text-center">
                   {row.extractedText.length > 60
                     ? row.extractedText.slice(0, 60) + "..."
                     : row.extractedText}
                 </TableCell>
-                <TableCell className="text-right py-5">
+                <TableCell className="py-5 text-center">
                   {row.confidence}%
                 </TableCell>
-                <TableCell className="text-right py-5 flex justify-end">
+                <TableCell className="py-5 text-center">
                   <button
-                    className="h-7 w-7 rounded-4xl hover:bg-gray-300 flex items-center justify-center duration-500 cursor-pointer"
+                    className="h-7 w-7 rounded-4xl hover:bg-gray-300 flex items-center justify-center duration-500 cursor-pointer mx-auto"
                     type="button"
                     aria-label="Download"
                     onClick={(e) => {
                       e.stopPropagation();
-                      // Download logic here
                       alert(`Downloading ${row.filename}`);
                     }}
                   >
@@ -169,7 +177,7 @@ export default function GeneratedResult({
               onClick={() => {}}
             >
               <Download className="mr-1 w-9 h-9 stroke-3"></Download>
-              Download .txt
+              {language == "en" ? "Download .txt" : "ទាញយក .txt"}
             </Button>
             <span
               className="flex items-center justify-center px-2 h-9 bg-[#142544] dark:bg-[#2998EF] border-l-1 border-white duration-500 dark:hover:bg-[#2998EF]/70 hover:bg-[#142544]/70 rounded-r-[12px] cursor-pointer relative select-none"
@@ -190,18 +198,18 @@ export default function GeneratedResult({
                 zIndex: 10,
               }}
             >
-              <div className="flex flex-col space-y-2">
+              <div className="flex flex-col">
                 <span
                   className="p-2 text-center dark:hover:duration-500 dark:hover:bg-[#142544]  hover:bg-[#FF4438] duration-500 font-bold hover:text-white cursor-pointer rounded-t-2xl"
                   onClick={() => setDropdownOpen(!dropdownOpen)}
                 >
-                  Download .txt
+                  {language == "en" ? "Download .txt" : "ទាញយក .txt"}
                 </span>
                 <span
                   className="p-2 text-center dark:hover:duration-500 dark:hover:bg-[#142544]  hover:bg-[#FF4438] duration-500 font-bold hover:text-white cursor-pointer rounded-b-2xl"
                   onClick={() => setDropdownOpen(!dropdownOpen)}
                 >
-                  Download .json
+                  {language == "en" ? "Download .json" : "ទាញយក .json"}
                 </span>
               </div>
             </div>
@@ -217,7 +225,7 @@ export default function GeneratedResult({
           }}
         >
           <RefreshCcw className="mr-1 w-9 h-9 stroke-3"></RefreshCcw>
-          Regenerate
+          {language == "en" ? "Regenerate" : "បង្កើតម្ដងទៀត"}
         </Button>
       </div>
     </div>

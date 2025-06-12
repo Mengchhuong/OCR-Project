@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Camera, ChevronLeft } from "lucide-react";
+import { Camera, ChevronLeft, Save, X } from "lucide-react";
+import { Button } from "../ui/button";
 
 export default function CameraCapture({
   onSave,
@@ -14,7 +15,7 @@ export default function CameraCapture({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [hasMounted, setHasMounted] = useState(false);
-
+  const [fileName, setFileName] = useState<string>("");
   // Helper to stop the camera stream
   const stopCamera = () => {
     if (videoRef.current?.srcObject) {
@@ -23,7 +24,6 @@ export default function CameraCapture({
       videoRef.current.srcObject = null;
     }
   };
-
   useEffect(() => {
     document.body.style.overflow = "hidden";
     setHasMounted(true);
@@ -79,6 +79,10 @@ export default function CameraCapture({
   };
 
   const getPhotoFileName = () => {
+    if (fileName && fileName.trim() !== "") {
+      // Ensure .png extension
+      return fileName.endsWith(".png") ? fileName : `${fileName}.png`;
+    }
     const now = new Date();
     const pad = (n: number) => n.toString().padStart(2, "0");
     return `photo_${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(
@@ -118,35 +122,51 @@ export default function CameraCapture({
       </button>
       <canvas ref={canvasRef} style={{ display: "none" }} />
       {capturedImage && (
-        <div className="fixed inset-0 z-60 flex flex-col items-center justify-center bg-black bg-opacity-90">
-          <img
-            src={capturedImage}
-            alt="Captured"
-            className="max-w-full max-h-full rounded-lg border shadow-md"
-          />
-          <div className="flex flex-row items-center space-x-3">
-            <button
-              onClick={() => {
-                if (capturedImage && onSave) {
-                  const file = dataURLtoFile(capturedImage, getPhotoFileName());
-                  onSave(file);
+        <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/70 backdrop-blur-sm transition-all">
+          <div className="relative bg-white/10 dark:bg-[#222]/60 rounded-2xl shadow-2xl p-8 flex flex-col items-center border border-white/20 backdrop-blur-lg">
+            <div className="flex justify-end items-end w-full top-4 right-4 mb-6 ">
+              <X
+                className="text-end w-7 h-7 cursor-pointer dark:text-white text-white"
+                onClick={() => {
                   setCapturedImage(null);
+                  setFileName("");
+                  stopCamera(); // 🛑 stop the camera here
                   if (onClose) onClose();
-                }
-              }}
-              className="mt-6 bg-[#07BC0C] text-white px-6 py-3 rounded-full text-lg shadow-lg hover:bg-[#07BC0C]/70 cursor-pointer duration-200"
-            >
-              Save
-            </button>
-            <button
-              onClick={() => {
-                setCapturedImage(null);
-                if (onClose) onClose();
-              }}
-              className="mt-6 bg-[#E74C3C] text-white px-6 py-3 rounded-full text-lg shadow-lg hover:bg-[#E74C3C]/70 cursor-pointer duration-200"
-            >
-              Close
-            </button>
+                }}
+              />
+            </div>
+            <img
+              src={capturedImage}
+              alt="Captured"
+              className="max-w-[60vw] max-h-[60vh] rounded-xl border-4 border-white/30 shadow-lg transition-all"
+            />
+            <div className="flex flex-row items-center gap-6 mt-8">
+              <input
+                type="text"
+                placeholder="Enter file name (optional)"
+                value={fileName}
+                onChange={(e) => setFileName(e.target.value)}
+                className="text-[14px] px-4 py-1 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white/80 text-black"
+              />
+              <Button
+                onClick={() => {
+                  if (capturedImage && onSave) {
+                    const file = dataURLtoFile(
+                      capturedImage,
+                      getPhotoFileName()
+                    );
+                    onSave(file);
+                    setCapturedImage(null);
+                    setFileName("");
+                    stopCamera();
+                    if (onClose) onClose();
+                  }
+                }}
+              >
+                <Save className="w-5 h-5" />
+                Save
+              </Button>
+            </div>
           </div>
         </div>
       )}

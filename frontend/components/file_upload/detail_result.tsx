@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { Button } from "../ui/button";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function DetailResult({
   FileTitle,
@@ -24,6 +25,7 @@ export default function DetailResult({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonGroupRef = useRef<HTMLDivElement>(null);
   const [dropdownWidth, setDropdownWidth] = useState<number>(0);
+  const { language } = useLanguage();
 
   useLayoutEffect(() => {
     if (buttonGroupRef.current) {
@@ -76,7 +78,11 @@ export default function DetailResult({
               }}
             >
               <Copy className="mr-1 w-9 h-9 stroke-3"></Copy>
-              {copied ? "Copied!" : "Copy"}
+              {copied ? (
+                <div>{language == "en" ? "Copied!" : "បានចម្លង"}</div>
+              ) : (
+                <div>{language == "en" ? "Copy" : "ចម្លង"}</div>
+              )}
             </Button>
           </div>
         </div>
@@ -84,7 +90,7 @@ export default function DetailResult({
       </div>
       <div className="flex justify-center items-center space-x-12">
         <div className="w-[20%] justify-end items-end relative">
-          <div className="flex flex-row items-end">
+          <div className="flex flex-row items-end" ref={buttonGroupRef}>
             <Button
               className="mt-4 w-[100%] rounded-r-[0]"
               variant="default"
@@ -93,11 +99,14 @@ export default function DetailResult({
               onClick={() => {}}
             >
               <Download className="mr-1 w-9 h-9 stroke-3"></Download>
-              Download .txt
+              {language == "en" ? "Download .txt" : "ទាញយក .txt"}
             </Button>
             <span
-              className="flex items-center justify-center px-2 h-9 bg-[#142544] dark:bg-[#2998EF] border-l-1 border-white duration-500 dark:hover:bg-[#2998EF]/70 hover:bg-[#142544]/70 rounded-r-[12px] cursor-pointer relative"
-              onClick={() => setDropdownOpen(!dropdownOpen)}
+              className="flex items-center justify-center px-2 h-9 bg-[#142544] dark:bg-[#2998EF] border-l-1 border-white duration-500 dark:hover:bg-[#2998EF]/70 hover:bg-[#142544]/70 rounded-r-[12px] cursor-pointer relative select-none"
+              onClick={(e) => {
+                e.stopPropagation();
+                setDropdownOpen((prev) => !prev);
+              }}
               onMouseDown={(e) => e.preventDefault()}
             >
               <ChevronDown className="w-5 h-5 text-white cursor-pointer" />
@@ -114,18 +123,18 @@ export default function DetailResult({
                 zIndex: 10,
               }}
             >
-              <div className="flex flex-col space-y-2">
+              <div className="flex flex-col">
                 <span
                   className="p-2 text-center dark:hover:duration-500 dark:hover:bg-[#142544]  hover:bg-[#FF4438] duration-500 font-bold hover:text-white cursor-pointer rounded-t-2xl"
                   onClick={() => setDropdownOpen(!dropdownOpen)}
                 >
-                  Download .txt
+                  {language == "en" ? "Download .txt" : "ទាញយក .txt"}
                 </span>
                 <span
                   className="p-2 text-center dark:hover:duration-500 dark:hover:bg-[#142544]  hover:bg-[#FF4438] duration-500 font-bold hover:text-white cursor-pointer rounded-b-2xl"
                   onClick={() => setDropdownOpen(!dropdownOpen)}
                 >
-                  Download .json
+                  {language == "en" ? "Download .json" : "ទាញយក .json"}
                 </span>
               </div>
             </div>
@@ -141,7 +150,7 @@ export default function DetailResult({
           }}
         >
           <RefreshCcw className="mr-1 w-9 h-9 stroke-3"></RefreshCcw>
-          Regenerate
+          {language == "en" ? "Regenerate" : "បង្កើតម្ដងទៀត"}
         </Button>
       </div>
     </div>

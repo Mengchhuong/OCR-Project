@@ -6,6 +6,7 @@ import { Upload, Camera } from "lucide-react";
 import UploadProcess from "./upload_process";
 import { uploadFileWithProgress } from "@/lib/api";
 import CameraCapture from "./camera_capture";
+import { useLanguage } from "@/context/LanguageContext";
 /**
  * FileUpload component allows users to upload multiple files.
  * - Supports drag and drop or click to upload.
@@ -28,6 +29,7 @@ export default function FileUpload({
     total: 0,
     percent: 0,
   });
+  const { language } = useLanguage();
   // Triggers the hidden file input when Upload button is clicked
   const handleUploadClick = () => {
     fileInputRef.current?.click();
@@ -123,8 +125,19 @@ export default function FileUpload({
           >
             <Image className="w-[222.2] h-[40] text-[#142544] dark:text-white" />
             <p className="text-[16px] text-[#142544] ml-4 font-normal text-center dark:text-white">
-              Drag and drop your file here, or click to browse <br />
-              Supported formats: JPG, PNG, PDF | Max size: 10MB
+              {language == "en" ? (
+                <>
+                  Drag and drop your file here, or click to browse
+                  <br />
+                  Supported formats: JPG, PNG, PDF | Max size: 10MB
+                </>
+              ) : (
+                <>
+                  ទាញនិងទម្លាក់ឯកសាររបស់អ្នកនៅទីនេះ ឬចុចដើម្បីរុករក
+                  <br />
+                  ឯកសារដែលអនុញ្ញាតិ៖ JPG, PNG, PDF | ទំហំអតិបរមា៖ 10MB
+                </>
+              )}
             </p>
             <div className="flex space-x-4 mt-4 justify-center">
               <input
@@ -146,7 +159,7 @@ export default function FileUpload({
                 }}
               >
                 <Upload className="stroke-3" />
-                Upload
+                {language == "en" ? "Upload" : "បង្ហោះ"}
               </Button>
               <Button
                 className="w-full"
@@ -159,7 +172,7 @@ export default function FileUpload({
                 }}
               >
                 <Camera className="stroke-3" />
-                Scan
+                {language == "en" ? "Scan" : "ស្កេន"}
               </Button>
             </div>
           </div>
