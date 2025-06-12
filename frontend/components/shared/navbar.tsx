@@ -4,7 +4,7 @@ import LanguageToggle from "../toggles/LanguageToggle";
 
 export default function Navbar() {
   return (
-    <nav className="flex items-center justify-between py-[20px] text-white px-[144px] bg-white dark:bg-[#121212] fixed w-full top-0 left-0 shadow-md z-10 [right:var(--removed-body-scroll-bar-size,0px)]">
+    <nav className="flex items-center justify-between py-[20px] text-white px-[144px] bg-white dark:bg-[#161C24] fixed w-full top-0 left-0 shadow-md z-10 [right:var(--removed-body-scroll-bar-size,0px)]">
       <Image
         className="cursor-pointer"
         src="/images/logo.png"

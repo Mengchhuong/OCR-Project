@@ -110,7 +110,7 @@ export default function FileUpload({
         />
       )}
       <div className="absolute top-[295px] left-0 right-0 px-[144px]">
-        <div className="bg-white dark:bg-[#212121] rounded-[12px] shadow-lg p-6 space-y-4">
+        <div className="bg-white dark:bg-[#161C24] rounded-[12px] shadow-lg p-6 space-y-4">
           <div
             className={`border-2 border-black dark:border-white rounded-[12px] py-[24px] border-dotted flex flex-col items-center justify-center space-y-3 transition-colors cursor-pointer ${
               dragActive ? "bg-blue-100 dark:bg-blue-900" : ""
@@ -155,7 +155,7 @@ export default function FileUpload({
                 type="button"
                 onClick={(e) => {
                   e.stopPropagation();
-                  setShowCamera(true); // Open camera on click
+                  setShowCamera(true);
                 }}
               >
                 <Camera className="stroke-3" />

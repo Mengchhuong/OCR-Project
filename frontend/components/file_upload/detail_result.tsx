@@ -8,7 +8,7 @@ import {
   RefreshCcw,
 } from "lucide-react";
 import { Button } from "../ui/button";
-import { useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 export default function DetailResult({
   FileTitle,
@@ -20,35 +20,67 @@ export default function DetailResult({
   onBack?: () => void;
 }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const buttonGroupRef = useRef<HTMLDivElement>(null);
+  const [dropdownWidth, setDropdownWidth] = useState<number>(0);
+
+  useLayoutEffect(() => {
+    if (buttonGroupRef.current) {
+      setDropdownWidth(buttonGroupRef.current.offsetWidth);
+    }
+  }, [dropdownOpen]);
+
+  useEffect(() => {
+    if (!dropdownOpen) return;
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [dropdownOpen]);
   return (
     <div>
-      <div className="border-2 border-[#142544]/30 rounded-[12] dark:border-white">
-        <div className="flex flex-row justify-between border-b-2 border-[#142544]/30 pb-3 dark:border-white">
-          <div className="flex items-center space-x-2 py-4 px-3">
+      <div className="border-2 border-[#142544]/30 rounded-[12px] dark:border-white">
+        <div className="flex flex-row items-center gap-x-8 py-4 px-3 h-full border-b-2 border-[#142544]/30 dark:border-white justify-between">
+          <div className="flex items-center">
             <div
-              className="w-7 h-7 flex items-center hover:bg-gray-300 cursor-po rounded-4xl cursor-pointer"
+              className="w-7 h-7 flex items-center hover:bg-gray-300 dark:hover:bg-[#142544]/80 rounded-4xl cursor-pointer"
               onClick={onBack}
             >
               <ChevronLeft className="mr-1 w-6 h-6 stroke-3"></ChevronLeft>
             </div>
-            <span className="text-[16px] font-bold ml-2">
+            <span className="text-[16px] font-bold ml-2 flex items-center">
               {FileTitle || "Detail Result"}
             </span>
           </div>
-          <Button
-            className="mt-4 w-[8%] mr-4"
-            variant="default"
-            size={"icon"}
-            type="button"
-            onClick={() => {
-              navigator.clipboard.writeText(DetailText);
-            }}
-          >
-            <Copy className="mr-1 w-9 h-9 stroke-3"></Copy>
-            Copy
-          </Button>
+          <div className="flex items-center justify-end gap-x-4 w-[30%]">
+            <Button
+              className="w-[40%]"
+              variant="default"
+              size={"icon"}
+              type="button"
+              onClick={() => {
+                navigator.clipboard.writeText(DetailText);
+                setTimeout(() => {
+                  setCopied(true);
+                }, 100);
+                setTimeout(() => {
+                  setCopied(false);
+                }, 1000);
+              }}
+            >
+              <Copy className="mr-1 w-9 h-9 stroke-3"></Copy>
+              {copied ? "Copied!" : "Copy"}
+            </Button>
+          </div>
         </div>
-        <div className="p-[20]">{DetailText}</div>
+        <div className="p-[20] leading-9">{DetailText}</div>
       </div>
       <div className="flex justify-center items-center space-x-12">
         <div className="w-[20%] justify-end items-end relative">
@@ -64,28 +96,35 @@ export default function DetailResult({
               Download .txt
             </Button>
             <span
-              className="flex items-center justify-center px-2 h-9 bg-[#142544] dark:bg-[#FF4438] dark:hover:bg-[#142544]/90 hover:bg-[#142544]/90 rounded-r-[12px] cursor-pointer relative"
+              className="flex items-center justify-center px-2 h-9 bg-[#142544] dark:bg-[#2998EF] border-l-1 border-white duration-500 dark:hover:bg-[#2998EF]/70 hover:bg-[#142544]/70 rounded-r-[12px] cursor-pointer relative"
               onClick={() => setDropdownOpen(!dropdownOpen)}
               onMouseDown={(e) => e.preventDefault()}
             >
               <ChevronDown className="w-5 h-5 text-white cursor-pointer" />
             </span>
           </div>
-          {dropdownOpen == true && (
+          {dropdownOpen && (
             <div
+              ref={dropdownRef}
               className="absolute mt-1 bg-white dark:text-[#142544] rounded-2xl justify-center items-center shadow-lg"
               style={{
                 top: "100%",
                 left: 0,
-                width: "100%",
+                width: dropdownWidth ? `${dropdownWidth}px` : "100%",
                 zIndex: 10,
               }}
             >
               <div className="flex flex-col space-y-2">
-                <span className="p-2 text-center dark:hover:duration-400 dark:hover:bg-[#142544]  hover:bg-[#FF4438] duration-400 font-bold hover:text-white cursor-pointer rounded-t-2xl">
+                <span
+                  className="p-2 text-center dark:hover:duration-500 dark:hover:bg-[#142544]  hover:bg-[#FF4438] duration-500 font-bold hover:text-white cursor-pointer rounded-t-2xl"
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                >
                   Download .txt
                 </span>
-                <span className="p-2 text-center dark:hover:duration-400 dark:hover:bg-[#142544]  hover:bg-[#FF4438] duration-400 font-bold hover:text-white cursor-pointer rounded-b-2xl">
+                <span
+                  className="p-2 text-center dark:hover:duration-500 dark:hover:bg-[#142544]  hover:bg-[#FF4438] duration-500 font-bold hover:text-white cursor-pointer rounded-b-2xl"
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                >
                   Download .json
                 </span>
               </div>

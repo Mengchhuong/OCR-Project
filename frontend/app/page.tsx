@@ -57,12 +57,12 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col dark:bg-[#121212]">
+    <div className="min-h-screen flex flex-col dark:bg-[#161C24]">
       {/* Navbar */}
       <Navbar />
       {/* Hero Section */}
       <div
-        className={`bg-[#142544] font-bold flex flex-col items-center justify-center text-center space-y-3 text-white pt-[30px] mt-20 ${
+        className={`bg-[#142544] dark:bg-[#212B36]  font-bold flex flex-col items-center justify-center text-center space-y-3 text-white pt-[30px] mt-20 ${
           showResult == false ? "pb-[90px] mb-55" : "pb-[30px]"
         }`}
       >
@@ -88,7 +88,7 @@ export default function Home() {
                 {uploadedFiles.map((file, idx) => (
                   <li
                     key={idx}
-                    className="bg-gray-100 dark:bg-[#121212] border-2 border-white rounded px-4 py-5 flex justify-between items-center"
+                    className="border-2 border-[#142544] dark:border-white rounded px-4 py-5 flex justify-between items-center"
                   >
                     <div className="flex items-center space-x-4">
                       <FileText className="w-6 h-6"></FileText>
