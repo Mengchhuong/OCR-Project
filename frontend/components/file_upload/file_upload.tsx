@@ -14,7 +14,6 @@ import { useLanguage } from "@/context/LanguageContext";
  * - Calls onScan when the Scan button is clicked.
  */
 export default function FileUpload({
-  onScan,
   onUploadComplete,
 }: {
   onScan?: () => void;
