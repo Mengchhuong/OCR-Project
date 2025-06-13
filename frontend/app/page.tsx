@@ -75,17 +75,17 @@ export default function Home() {
         <Navbar />
         {/* Hero Section */}
         <div
-          className={`bg-[#142544] dark:bg-[#212B36] font-bold flex flex-col items-center justify-center text-center space-y-3 text-white pt-[30px] mt-20 ${
+          className={`bg-[#142544] dark:bg-[#212B36] font-bold flex flex-col items-center justify-center text-center space-y-3 text-white pt-[30px] mt-14 md:mt-20 lg:mt-20 px-[40px] md:px-[79px] lg:px-[144px] ${
             showResult == false ? "pb-[90px] mb-55" : "pb-[30px]"
           }`}
         >
-          <p className="text-[7vw] md:text-[34px]">
+          <p className="text-[20px] md:text-[28px] lg:text-[34px]">
             ការប្រែក្លាយឯកសារខ្មែរទៅជាឌីជីថល
           </p>
-          <p className="text-[7vw] md:text-[34px]">
+          <p className="text-[20px] md:text-[28px] lg:text-[34px]">
             Automating the Digitization of Khmer Documents
           </p>
-          <p className="text-[5vw] md:text-[22px]">
+          <p className="text-[16px] md:text-[20px] lg:text-[22px]">
             {language == "en"
               ? "Upload your Khmer document and get instant text extraction"
               : "បង្ហោះឯកសារជាភាសាខ្មែររបស់អ្នក និងទទួលបានការទាញយកអត្ថបទភ្លាមៗ"}
@@ -99,10 +99,10 @@ export default function Home() {
           />
         )}
         {/* Show uploaded files */}
-        <div className="flex-grow px-[144px]">
+        <div className="flex-grow px-[40px] md:px-[79px] lg:px-[144px]">
           {uploadedFiles.length > 0 && showResult == false && (
             <div className="py-4">
-              <h2 className="text-xl font-bold mb-4">
+              <h2 className="text-[16px] md:text-[20px] lg:text-[22px] md:text-2xl font-bold mb-4">
                 {language == "en" ? "Uploaded Files" : "ឯកសារដែលបានបង្ហោះ"}
               </h2>
               <div className="flex flex-col justify-center items-center w-full">
@@ -110,16 +110,18 @@ export default function Home() {
                   {uploadedFiles.map((file, idx) => (
                     <li
                       key={idx}
-                      className="border-2 border-[#142544]/30 dark:border-white rounded-[12px] px-4 py-5 flex justify-between items-center cursor-pointer"
+                      className="border-2 border-[#142544]/30 dark:border-white rounded-[12px] px-4 py-5 flex flex-col md:flex-col lg:flex-row justify-between items-center cursor-pointer"
                       onClick={() => setPreviewFile(file)}
                     >
                       <div className="flex items-center space-x-4">
                         <FileText className="w-6 h-6"></FileText>
-                        <span className="text-[16px]">{file.name}</span>
+                        <span className="text-[14px] md:text-[16px] lg:text-[16px]">
+                          {file.name}
+                        </span>
                       </div>
                       <div className="flex items-center space-x-10">
                         {/* Format and display file size */}
-                        <span className="text-[16px]">
+                        <span className="text-[14px] md:text-[16px] lg:text-[16px]">
                           {formatFileSize(file.size)}
                         </span>
                         <span

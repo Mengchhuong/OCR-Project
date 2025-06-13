@@ -36,7 +36,15 @@ export default function UploadProcess({
         </p>
         <div className="flex flex-row justify-between mt-6">
           <p className="text-[18px] text-black font-bold dark:text-white">
-            Processing image {current} of {total}
+            {language == "en" ? (
+              <>
+                Processing image {current} of {total}
+              </>
+            ) : (
+              <>
+                ដំណើរការរូបថត {current} នៃ {total}
+              </>
+            )}
           </p>
           <p className="text-[18px] font-bold">{percent}%</p>
         </div>
@@ -44,7 +52,9 @@ export default function UploadProcess({
           <Progress value={percent} className="h-4 bg-gray-200" />
         </div>
         <p className="text-[18px] text-[#142544]/50 mt-6 dark:text-white">
-          Powered by CADT - Cambodian Academy of Digital Technology
+          {language == "en"
+            ? "Powered by CADT - Cambodian Academy of Digital Technology"
+            : "ដំណើរការដោយ CADT - បណ្ឌិតសភាឌីជីថលខ្មែរ"}
         </p>
       </div>
     </div>

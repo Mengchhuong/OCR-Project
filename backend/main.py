@@ -3,7 +3,11 @@ from typing import List, Union
 from fastapi import FastAPI, File, UploadFile
 import os
 from fastapi.middleware.cors import CORSMiddleware
-
+from fastapi.responses import JSONResponse
+from supabase import create_client, Client
+from typing import List
+from dotenv import load_dotenv
+load_dotenv()
 app = FastAPI()
 
 app.add_middleware(
@@ -13,10 +17,14 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+SUPABASE_BUCKET = os.getenv("SUPABASE_BUCKET")
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 @app.get("/")
-def read_root():
-    return {"Hello": "World"}
+async def root():
+    return JSONResponse(content={"message": "Hello from root-level FastAPI on Vercel!"})
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):
@@ -27,13 +35,33 @@ async def create_file(files: List[bytes] = File(...)):
     return {"file_sizes": [len(file) for file in files]}
 
 @app.post("/uploadfile/")
-async def create_upload_file(files: List[UploadFile] = File(...)):
+async def upload_file(files: List[UploadFile] = File(...)):
     result = []
-    os.makedirs("database/uploads", exist_ok=True)
+
     for file in files:
-        file_location = f"database/uploads/{file.filename}"
         content = await file.read()
-        with open(file_location, "wb") as f:
-            f.write(content)
-        result.append([file.filename, len(content)])
-    return {"message": result}
+        file_path = file.filename
+
+        # Delete old file if it exists
+        try:
+            supabase.storage.from_(SUPABASE_BUCKET).remove([file_path])
+        except Exception:
+            pass  # If file doesn't exist, ignore error
+
+        # Upload new file
+        try:
+            supabase.storage.from_(SUPABASE_BUCKET).upload(file_path, content, {
+                "content-type": file.content_type
+            })
+        except Exception as e:
+            return JSONResponse(status_code=500, content={"error": f"Upload failed: {str(e)}"})
+
+        # Get public URL
+        try:
+            public_url = supabase.storage.from_(SUPABASE_BUCKET).get_public_url(file_path)
+            result.append({"filename": file.filename, "url": public_url})
+        except Exception as e:
+            return JSONResponse(status_code=500, content={"error": f"Upload succeeded but URL failed: {str(e)}"})
+
+    return {"files": result}
+

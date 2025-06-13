@@ -83,6 +83,8 @@ export default function CameraCapture({
       // Ensure .png extension
       return fileName.endsWith(".png") ? fileName : `${fileName}.png`;
     }
+    // To avoid hydration mismatch, generate the filename only on the client after mount
+    if (!hasMounted) return "photo.png";
     const now = new Date();
     const pad = (n: number) => n.toString().padStart(2, "0");
     return `photo_${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(

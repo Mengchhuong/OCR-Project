@@ -28,7 +28,7 @@ export function uploadFileWithProgress(
         try {
           const data = JSON.parse(xhr.responseText);
           // data.message is an array of [filename, filesize], but we upload one file
-          resolve(data.message[0]);
+          resolve(data.files[0]);
         } catch (e) {
           reject(e);
         }

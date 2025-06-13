@@ -111,7 +111,7 @@ export default function FileUpload({
           onClose={() => setShowCamera(false)}
         />
       )}
-      <div className="absolute top-[295px] left-0 right-0 px-[144px]">
+      <div className="absolute top-[295px] md:top-[275px] lg:top-[295px] left-0 right-0 px-[40px] md:px-[79px] lg:px-[144px]">
         <div className="bg-white dark:bg-[#161C24] rounded-[12px] shadow-lg p-6 space-y-4">
           <div
             className={`border-2 border-black dark:border-white rounded-[12px] py-[24px] border-dotted flex flex-col items-center justify-center space-y-3 transition-colors cursor-pointer ${
@@ -124,7 +124,7 @@ export default function FileUpload({
             onDragEnd={handleDragLeave}
           >
             <Image className="w-[222.2] h-[40] text-[#142544] dark:text-white" />
-            <p className="text-[16px] text-[#142544] ml-4 font-normal text-center dark:text-white">
+            <p className="text-[12px] md:text-[16px] lg:text-[16px] text-[#142544] ml-4 font-normal text-center dark:text-white">
               {language == "en" ? (
                 <>
                   Drag and drop your file here, or click to browse
