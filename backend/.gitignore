@@ -1,2 +1,3 @@
 database/
 .vercel
+__pycache__/
