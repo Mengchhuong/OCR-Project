@@ -1,6 +1,8 @@
 from typing import List, Union
 
 from fastapi import FastAPI, File, UploadFile
+from fastapi import Request
+from fastapi.responses import JSONResponse
 import os
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -22,9 +24,9 @@ SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 SUPABASE_BUCKET = os.getenv("SUPABASE_BUCKET")
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-@app.get("/")
-async def root():
-    return JSONResponse(content={"message": "Hello from root-level FastAPI on Vercel!"})
+@app.api_route("/", methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
+async def root_any_method(request: Request):
+    return JSONResponse(content={"message": f"Hello from {request.method} on root!"})
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):
