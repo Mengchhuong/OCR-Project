@@ -2,13 +2,13 @@ services:
   - type: web
     name: fastapi-backend
     env: python
-    buildCommand: ""
-    startCommand: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port 8000"
     plan: free
     envVars:
       - key: SUPABASE_URL
         value: https://kctmyvgirjlezdbxzxed.supabase.co
       - key: SUPABASE_KEY
-        value: yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtjdG15dmdpcmpsZXpkYnh6eGVkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTgwMDQwNywiZXhwIjoyMDY1Mzc2NDA3fQ.GSO0XeI52ZzkWTWw3OJO5pFNReWIQPvuhY5m6LriEOw
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtjdG15dmdpcmpsZXpkYnh6eGVkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTgwMDQwNywiZXhwIjoyMDY1Mzc2NDA3fQ.GSO0XeI52ZzkWTWw3OJO5pFNReWIQPvuhY5m6LriEOw
       - key: SUPABASE_BUCKET
         value: uploads
