@@ -29,34 +29,34 @@ The goal of this project is to assist in the preservation and digitization of Kh
 
 ## ✨ Key Features
 
-*   🖼 **Upload Interface:** Supports Khmer document files (JPG, PNG, PDF).
-*   ⚙️ **Modern Framework:** Built with Next.js (App Router, TypeScript).
-*   🎨 **Stylish UI:** Styled using Tailwind CSS for a sleek, responsive design.
-*   🧩 **Component-Powered:** UI components from shadcn/ui for consistency and quality.
-*   ⚡ **Optimized for ML:** Designed for easy integration with machine learning-based OCR systems.
-*   🌐 **Responsive Design:** Mobile-friendly and accessible on various devices.
-*   🇰🇭 **Khmer-Language Focus:** Prioritizes Khmer-language support with modern UX principles.
-*   💬 **Extendable:** Easily adaptable to support multilingual interfaces.
+- 🖼 **Upload Interface:** Supports Khmer document files (JPG, PNG, PDF).
+- ⚙️ **Modern Framework:** Built with Next.js (App Router, TypeScript).
+- 🎨 **Stylish UI:** Styled using Tailwind CSS for a sleek, responsive design.
+- 🧩 **Component-Powered:** UI components from shadcn/ui for consistency and quality.
+- ⚡ **Optimized for ML:** Designed for easy integration with machine learning-based OCR systems.
+- 🌐 **Responsive Design:** Mobile-friendly and accessible on various devices.
+- 🇰🇭 **Khmer-Language Focus:** Prioritizes Khmer-language support with modern UX principles.
+- 💬 **Extendable:** Easily adaptable to support multilingual interfaces.
 
 ---
 
 ## 🎯 Target Use Cases
 
-*   **National Digitization Initiatives:** Assisting Cambodia in large-scale digitization efforts.
-*   **Academic & Archival Institutions:** Enabling the digitization of Khmer texts for research and preservation.
-*   **AI/ML Research:** Providing a frontend for teams building OCR models for Khmer script.
-*   **Cultural Preservation:** Supporting government or NGO efforts to preserve cultural records.
+- **National Digitization Initiatives:** Assisting Cambodia in large-scale digitization efforts.
+- **Academic & Archival Institutions:** Enabling the digitization of Khmer texts for research and preservation.
+- **AI/ML Research:** Providing a frontend for teams building OCR models for Khmer script.
+- **Cultural Preservation:** Supporting government or NGO efforts to preserve cultural records.
 
 ---
 
 ## ⚙️ Tech Stack
 
-*   **Framework:** [Next.js](https://nextjs.org/) (using App Router)
-*   **Language:** [TypeScript](https://www.typescriptlang.org/)
-*   **Styling:** [Tailwind CSS](https://tailwindcss.com/)
-*   **UI Components:** [shadcn/ui](https://ui.shadcn.com/)
-*   **Package Manager:** (Specify npm, yarn, or pnpm)
-*   **Linting/Formatting:** (e.g., ESLint, Prettier - if configured)
+- **Framework:** [Next.js](https://nextjs.org/) (using App Router)
+- **Language:** [TypeScript](https://www.typescriptlang.org/)
+- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+- **UI Components:** [shadcn/ui](https://ui.shadcn.com/)
+- **Package Manager:** (Specify npm, yarn, or pnpm)
+- **Linting/Formatting:** (e.g., ESLint, Prettier - if configured)
 
 ---
 
@@ -64,11 +64,11 @@ The goal of this project is to assist in the preservation and digitization of Kh
 
 This project leverages modern frontend technologies and adheres to best practices in React development:
 
-*   **Modular Component Structure:** Promotes reusability and maintainability.
-*   **Global Styling with Tailwind:** Efficiently manages styles utility-first.
-*   **Accessible UI:** Utilizes shadcn/ui components, designed with accessibility in mind.
-*   **API Ready:** Easily connectable to RESTful APIs for the OCR backend.
-*   **Extensible:** Built for future growth, such as adding user authentication, history tracking, or role-based access.
+- **Modular Component Structure:** Promotes reusability and maintainability.
+- **Global Styling with Tailwind:** Efficiently manages styles utility-first.
+- **Accessible UI:** Utilizes shadcn/ui components, designed with accessibility in mind.
+- **API Ready:** Easily connectable to RESTful APIs for the OCR backend.
+- **Extensible:** Built for future growth, such as adding user authentication, history tracking, or role-based access.
 
 ---
 
@@ -78,8 +78,8 @@ Follow these instructions to get a copy of the project up and running on your lo
 
 ### Prerequisites
 
-*   [Node.js](https://nodejs.org/) (v18.x or later recommended)
-*   [npm](https://www.npmjs.com/), [yarn](https://yarnpkg.com/), or [pnpm](https://pnpm.io/) (choose one)
+- [Node.js](https://nodejs.org/) (v18.x or later recommended)
+- [npm](https://www.npmjs.com/), [yarn](https://yarnpkg.com/), or [pnpm](https://pnpm.io/) (choose one)
 
 ### Installation
 
@@ -88,45 +88,48 @@ Follow these instructions to get a copy of the project up and running on your lo
     git clone https://github.com/Mengchhuong/OCR-Project
     cd frontend
     ```
+
 ### Frontend
 
 2.  **Install dependencies:**
-    *   Using npm:
-        ```bash
-        npm install
-        ```
-    *   Using yarn:
-        ```bash
-        yarn install
-        ```
-    *   Using pnpm:
-        ```bash
-        pnpm install
-        ```
+    - Using npm:
+      ```bash
+      npm install
+      ```
+    - Using yarn:
+      ```bash
+      yarn install
+      ```
+    - Using pnpm:
+      ```bash
+      pnpm install
+      ```
 
 ### Running the Development Server
 
 Once dependencies are installed, you can start the development server:
 
-*   Using npm:
-    ```bash
-    npm run dev
-    ```
-*   Using yarn:
-    ```bash
-    yarn dev
-    ```
-*   Using pnpm:
-    ```bash
-    pnpm dev
-    ```
+- Using npm:
+  ```bash
+  npm run dev
+  ```
+- Using yarn:
+  ```bash
+  yarn dev
+  ```
+- Using pnpm:
+  ```bash
+  pnpm dev
+  ```
 
 Open [http://localhost:3000](http://localhost:3000) (or the port specified in your terminal) with your browser to see the application.
 
 ---
 
 ### Backend
+
 3.  **Clone the repository:**
+
     ```bash
     cd backend
     cd .venv
@@ -134,32 +137,34 @@ Open [http://localhost:3000](http://localhost:3000) (or the port specified in yo
     ```
 
 4.  **Install dependencies:**
-    *   Using npm:
-        ```bash
-        activate.bat
-        ```
-    *   Install Fastapi:
-        ```
-        pip install "fastapi[standard]"
-        ```   
 
-    *   Using npm:
-        ```bash
-        deactivate.bat
-        ```
+    - Using npm:
+      ```bash
+      activate.bat
+      ```
+    - Install Fastapi:
+
+      ```
+      pip install "fastapi[standard]"
+      ```
+
+    - Using npm:
+      ```bash
+      deactivate.bat
+      ```
 
 ### Running the Development Server
 
 Once dependencies are installed, you can start the development server:
 
-*   Using fastapi:
-    ```bash
-    fastapi dev main.py
-    ```
-*   Using uvicorn:
-    ```bash
-    uvicorn main:app --reload
-    ```
+- Using fastapi:
+  ```bash
+  fastapi dev app/main.py
+  ```
+- Using uvicorn:
+  ```bash
+  uvicorn app.main:app --reload
+  ```
 
 Open [http://127.0.0.1:8000](http://127.0.0.1:8000) (or the port specified in your terminal) with your browser to see the application.
 
@@ -167,7 +172,7 @@ Open [http://127.0.0.1:8000](http://127.0.0.1:8000) (or the port specified in yo
 
 ## Acknowledgements
 
-*   [Next.js](https://nextjs.org/)
-*   [Tailwind CSS](https://tailwindcss.com/)
-*   [shadcn/ui](https://ui.shadcn.com/)
-*   [FastAPI](https://fastapi.tiangolo.com/)
+- [Next.js](https://nextjs.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [shadcn/ui](https://ui.shadcn.com/)
+- [FastAPI](https://fastapi.tiangolo.com/)
