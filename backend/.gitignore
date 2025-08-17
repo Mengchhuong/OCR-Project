@@ -1,3 +1,5 @@
 database/
 .vercel
 __pycache__/
+
+.env
