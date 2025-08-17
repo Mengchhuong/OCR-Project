@@ -1,0 +1,83 @@
+{
+  "fields": {
+    "city": { "box": { "x": 430, "y": 397, "width": 450, "height": 89 } },
+    "district": { "box": { "x": 474, "y": 488, "width": 410, "height": 75 } },
+    "commune": { "box": { "x": 418, "y": 570, "width": 497, "height": 68 } },
+    "certificate_number": {
+      "box": { "x": 1558, "y": 408, "width": 385, "height": 66 }
+    },
+    "doc_number": {
+      "box": { "x": 1797, "y": 481, "width": 274, "height": 73 }
+    },
+    "certificate_year": {
+      "box": { "x": 1534, "y": 558, "width": 432, "height": 82 }
+    },
+    "last_name": { "box": { "x": 773, "y": 755, "width": 1038, "height": 70 } },
+    "first_name": {
+      "box": { "x": 773, "y": 848, "width": 1038, "height": 67 }
+    },
+    "last_name_latin": {
+      "box": { "x": 771, "y": 934, "width": 1256, "height": 70 }
+    },
+    "first_name_latin": {
+      "box": { "x": 773, "y": 1023, "width": 1256, "height": 64 }
+    },
+    "gender": { "box": { "x": 1834, "y": 828, "width": 199, "height": 89 } },
+    "nationality": {
+      "box": { "x": 769, "y": 1113, "width": 1257, "height": 67 }
+    },
+    "dob": { "box": { "x": 773, "y": 1198, "width": 1251, "height": 72 } },
+    "pob": { "box": { "x": 768, "y": 1289, "width": 1259, "height": 216 } },
+    "father_name": {
+      "box": { "x": 769, "y": 1615, "width": 621, "height": 70 }
+    },
+    "mother_name": {
+      "box": { "x": 1409, "y": 1614, "width": 621, "height": 73 }
+    },
+    "father_name_latin": {
+      "box": { "x": 766, "y": 1705, "width": 626, "height": 69 }
+    },
+    "mother_name_latin": {
+      "box": { "x": 1407, "y": 1706, "width": 619, "height": 69 }
+    },
+    "father_nationality": {
+      "box": { "x": 768, "y": 1792, "width": 624, "height": 72 }
+    },
+    "mother_nationality": {
+      "box": { "x": 1407, "y": 1791, "width": 622, "height": 72 }
+    },
+    "father_dob": {
+      "box": { "x": 766, "y": 1880, "width": 626, "height": 73 }
+    },
+    "mother_dob": {
+      "box": { "x": 1407, "y": 1892, "width": 622, "height": 59 }
+    },
+    "father_pob": {
+      "box": { "x": 765, "y": 1969, "width": 627, "height": 222 }
+    },
+    "mother_pob": {
+      "box": { "x": 1409, "y": 1966, "width": 624, "height": 225 }
+    },
+    "first_pob_baby": {
+      "box": { "x": 762, "y": 2200, "width": 1270, "height": 249 }
+    },
+    "created_place": {
+      "box": { "x": 1029, "y": 2472, "width": 305, "height": 52 }
+    },
+    "created_date": {
+      "box": { "x": 1418, "y": 2469, "width": 127, "height": 56 }
+    },
+    "create_month": {
+      "box": { "x": 1601, "y": 2469, "width": 161, "height": 63 }
+    },
+    "create_year": {
+      "box": { "x": 1817, "y": 2468, "width": 208, "height": 64 }
+    },
+    "created_by": {
+      "box": { "x": 1326, "y": 2630, "width": 374, "height": 72 }
+    },
+    "signature": {
+      "box": { "x": 1326, "y": 2785, "width": 388, "height": 120 }
+    }
+  }
+}

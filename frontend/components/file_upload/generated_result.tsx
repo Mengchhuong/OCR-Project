@@ -13,27 +13,35 @@ import React, { useState, useRef, useLayoutEffect, useEffect } from "react";
 import { Button } from "../ui/button";
 import DetailResult from "./detail_result";
 import { useLanguage } from "@/context/LanguageContext";
+import { get_extract_json_url } from "@/lib/api";
+type GeneratedFileInfo = {
+  file_name: string;
+  file_id: string;
+  extract_detail: string;
+  confidence: number;
+  image_url: string;
+};
 
 export default function GeneratedResult({
-  uploadedFile,
+  generatedFile,
 }: {
-  uploadedFile?: File[];
+  generatedFile?: GeneratedFileInfo[];
 }) {
-  const extractedTextRandom = [
-    "ប្រទេសកម្ពុជា មានប្រវត្តិសាស្ត្រដ៏យូរលង់ ហើយមានអរិយធម៌បុរាណដ៏លេចធ្លោ ដែលបានសាងសង់វិមានប្រាសាទជាច្រើន ដូចជា ប្រាសាទអង្គរវត្ត និងអង្គរធំ។ អរិយធម៌ខ្មែរបានទទួលឥទ្ធិពលពីសាសនាព្រាង និងសាសនាពុទ្ធ តាំងពីសតវត្សទី១។",
-    "សូមស្វាគមន៍មកកាន់ប្រព័ន្ធប្រែក្លាយឯកសារជាអក្សរខ្មែរ។ ប្រព័ន្ធនេះត្រូវបានរចនាឡើងដើម្បីជួយអ្នកក្នុងការបម្លែងឯកសារសរសេរជារូបភាព ឬ PDF ទៅជាអក្សរដែលអាចកែប្រែបានយ៉ាងងាយស្រួល។ វាអាចជួយអ្នកក្នុងការបញ្ចូលឯកសារទៅក្នុងប្រព័ន្ធឌីជីថល។",
-    "ការប្រែក្លាយឯកសារខ្មែរទៅជាឌីជីថល គឺជាដំណើរការដែលមានសារៈសំខាន់ ដើម្បីរក្សានិងបន្តអក្សរសាស្ត្រខ្មែរ។ វាជួយក្នុងការសន្សំទុកឯកសារបែបប្រវត្តិសាស្ត្រផ្សេងៗ និងធ្វើឱ្យអាចចូលដំណើរការផលិតផលវិជ្ជាសាស្ត្របានយ៉ាងរហ័ស។",
-    "ប្រព័ន្ធនេះអាចជួយអ្នកក្នុងការប្រែក្លាយឯកសារដែលមានអត្ថបទខ្មែរ ឱ្យក្លាយជាអត្ថបទដែលអាចកែសម្រួលបាន។ វាផ្តល់ជូននូវភាពងាយស្រួលក្នុងការស្វែងរក និងកែប្រែអត្ថបទ ហើយគាំទ្រការពង្រឹងប្រព័ន្ធឌីជីថលនៅក្នុងវិស័យការងាររដ្ឋ និងឯកជន។",
-  ];
-
-  const data = (uploadedFile ?? []).map((file, idx) => ({
-    filename: file.name,
-    extractedText: extractedTextRandom[idx % extractedTextRandom.length],
-    confidence: Math.floor(Math.random() * 100) + 1,
+  const data = (generatedFile ?? []).map((file) => ({
+    filename: file.file_name,
+    extractedText: file.extract_detail,
+    confidence: file.confidence,
+    image_url: file.image_url,
+    file_id: file.file_id,
   }));
   const [selected, setSelected] = useState<number[]>([]);
   const allSelected = selected.length === data.length;
-  const [detailText, setDetailText] = useState<string | null>(null);
+  // Replace detailText with an object holding text + metadata
+  const [detail, setDetail] = useState<{
+    text: string;
+    image_url?: string;
+    filename: string;
+  } | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonGroupRef = useRef<HTMLDivElement>(null);
@@ -60,22 +68,111 @@ export default function GeneratedResult({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [dropdownOpen]);
 
-  if (detailText) {
+  if (detail) {
     return (
       <DetailResult
-        DetailText={detailText}
-        FileTitle={
-          data.find((row) => row.extractedText === detailText)?.filename
-        }
-        onBack={() => setDetailText(null)}
+        DetailText={detail.text}
+        Image_url={detail.image_url}
+        FileTitle={detail.filename}
+        onBack={() => setDetail(null)}
       />
     );
   }
 
-  const onFileClick = (fileName: string) => {
-    const found = data.find((row) => row.filename === fileName);
-    if (found) setDetailText(found.extractedText);
+  const onFileClick = async (row: (typeof data)[0]) => {
+    try {
+      const fileId = row.file_id;
+      if (!fileId) {
+        setDetail({
+          text: "No file id found for this row.",
+          image_url: row.image_url,
+          filename: row.filename,
+        });
+        return;
+      }
+
+      const extract_json_url = await get_extract_json_url(fileId);
+      if (!extract_json_url) {
+        setDetail({
+          text: "Extracted JSON is not available for this file.",
+          image_url: row.image_url,
+          filename: row.filename,
+        });
+        return;
+      }
+
+      const res = await fetch(extract_json_url.toString());
+      if (!res.ok) {
+        setDetail({
+          text: `Failed to fetch extracted JSON (status ${res.status}).`,
+          image_url: row.image_url,
+          filename: row.filename,
+        });
+        return;
+      }
+
+      const jsonData = await res.json();
+
+      const formattedText = formatExtractedText(jsonData.extracted_text);
+      setDetail({
+        text: formattedText,
+        image_url: row.image_url,
+        filename: row.filename,
+      });
+    } catch (err) {
+      console.error("Failed to fetch JSON:", err);
+      setDetail({
+        text: "An error occurred while fetching the extracted JSON.",
+        image_url: row.image_url,
+        filename: row.filename,
+      });
+    }
   };
+  function formatExtractedText(extractedText: any[]) {
+    if (!extractedText || extractedText.length === 0) return "No data found.";
+
+    const item = extractedText[0];
+    return `
+<b>ខេត្ត ក្រុង:</b>: ${item.city}
+<b>ស្រុក ខណ្ឌ:</b> ${item.district}
+<b>ឃុំ សង្កាត់:</b> ${item.commune}
+
+<b>លេខ:</b> ${item.certificate_number} 
+<b>សៀវភៅបញ្ជាក់កំណើតលេខ:</b> ${item.doc_number} 
+<b>ឆ្នាំ:</b> ${item.certificate_year}
+
+<b>នាមត្រកូល:</b> ${item.last_name}
+<b>នាមខ្លួនអ្នកកើត:</b> ${item.first_name}
+<b>ភេទ:</b> ${item.gender}
+<b>សញ្ជាតិ:</b> ${item.nationality}
+<b>ថ្ងៃខែឆ្នាំកំណើត:</b> ${item.dob}
+<b>ទីកន្លែងកំណើត:</b> ${item.pob}
+
+<b>+ ជាឡាតាំង</b>
+<b>នាមត្រកូល:</b> ${item.last_name_latin}
+<b>នាមខ្លួន:</b> ${item.first_name_latin}
+
+<b>+ ឪពុក:</b>
+<b>ឈ្មោះ:</b> ${item.father_name}
+<b>ឈ្មោះឡាតាំង:</b> ${item.father_name_latin}
+<b>សញ្ជាតិ:</b> ${item.father_nationality}
+<b>ថ្ងែ ខែ ឆ្នាំ កំណើត:</b> ${item.father_dob}
+<b>ទីកន្លែងកំណើត:</b> ${item.father_pob}
+
+<b>+ ម្តាយ:</b>
+<b>ឈ្មោះ:</b> ${item.mother_name} 
+<b>ឈ្មោះឡាតាំង:</b> ${item.mother_name_latin}
+<b>សញ្ជាតិ:</b> ${item.mother_nationality}
+<b>ថ្ងែ ខែ ឆ្នាំ កំណើត:</b> ${item.mother_dob}
+<b>ទីកន្លែងកំណើត:</b> ${item.mother_pob}
+
+<b>ទីលំនៅពេលទារកកើត:</b> ${item.first_pob_baby}
+
+<b>ធ្វើនៅ:</b> ${item.created_place}, <b>ថ្ងែទី:</b> ${item.created_date} <b>ខែ:</b> ${item.create_month} <b>ឆ្នាំ:</b> ${item.create_year}
+<b>មន្ត្រីអត្រានុកូលដ្ឋាន:</b> ${item.created_by}
+<b>ហត្ថលេខា:</b> ${item.signature}
+  `.trim();
+  }
 
   const handleSelectAll = () => {
     setSelected(allSelected ? [] : data.map((_, idx) => idx));
@@ -122,7 +219,7 @@ export default function GeneratedResult({
               <TableRow
                 key={row.filename}
                 className="cursor-pointer text-center"
-                onClick={() => onFileClick(row.filename)}
+                onClick={() => onFileClick(row)}
               >
                 <TableCell className="text-center">
                   <input

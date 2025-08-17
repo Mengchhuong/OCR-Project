@@ -14,9 +14,11 @@ import { useLanguage } from "@/context/LanguageContext";
 export default function DetailResult({
   FileTitle,
   DetailText = " ប្រទេសកម្ពុជា មានប្រវត្តិសាស្ត្រដ៏យូរលង់ ហើយមានអរិយធម៌ដ៏រុងរឿង។ខ្ញុំសូមជូនពរឱ្យអ្នកទាំងអស់គ្នាមានសុខភាពល្អ និងសុភមង្គលគ្រប់ពេលវេលា។ប្រាសាទអង្គរវត្ត គឺជានិមិត្តរូបនៃប្រទេសកម្ពុជានិងជាសំណង់ស្ថាបត្យកម្មដ៏អស្ចារ្យបំផុតមួយនៅលើពិភពលោក។",
+  Image_url,
   onBack,
 }: {
   FileTitle?: string;
+  Image_url?: string;
   DetailText?: string;
   onBack?: () => void;
 }) {
@@ -86,7 +88,23 @@ export default function DetailResult({
             </Button>
           </div>
         </div>
-        <div className="p-[20] leading-9">{DetailText}</div>
+        <div className="p-[20] leading-9 flex space-x-5">
+          <div className="w-[50%] space-y-5">
+            <h1 className="font-semibold text-[16px] md:text-[20px] lg:text-[22px] text-center">
+              {language == "en" ? "Your Input" : "ការបញ្ចូលរបស់អ្នក"}
+            </h1>
+            <embed src={Image_url} className="w-full h-auto" />
+          </div>
+          <div className="w-[50%] space-y-3">
+            <h1 className="font-semibold text-[16px] md:text-[20px] lg:text-[22px] text-center">
+              {language == "en" ? "Our Result" : "លទ្ធផលដែលបង្កើតឡើង"}
+            </h1>
+            <p
+              className="whitespace-pre-wrap"
+              dangerouslySetInnerHTML={{ __html: DetailText }}
+            ></p>
+          </div>
+        </div>
       </div>
       <div className="flex justify-center items-center space-x-12">
         <div className="w-[20%] justify-end items-end relative">

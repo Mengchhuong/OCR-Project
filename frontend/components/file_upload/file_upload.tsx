@@ -7,12 +7,13 @@ import UploadProcess from "./upload_process";
 import { uploadFileWithProgress } from "@/lib/api";
 import CameraCapture from "./camera_capture";
 import { useLanguage } from "@/context/LanguageContext";
-/**
- * FileUpload component allows users to upload multiple files.
- * - Supports drag and drop or click to upload.
- * - Calls onUploadComplete with an array of [filename, filesize] after upload.
- * - Calls onScan when the Scan button is clicked.
- */
+
+type UploadedFileInfo = {
+  filename: string;
+  url: string;
+  file_id: string;
+  status: string;
+};
 export default function FileUpload({
   onUploadComplete,
 }: {
@@ -23,6 +24,7 @@ export default function FileUpload({
   const [dragActive, setDragActive] = useState(false);
   const [showUploadProcess, setShowUploadProcess] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
+  const [fileuploaded, setFileuploaded] = useState<UploadedFileInfo[]>([]);
   const [progress, setProgress] = useState({
     current: 0,
     total: 0,
@@ -53,7 +55,16 @@ export default function FileUpload({
   const handleFiles = async (files: File[]) => {
     // Only allow jpg, png, pdf
     const allowedTypes = ["image/jpeg", "image/png", "application/pdf"];
-    const validFiles = files.filter((file) => allowedTypes.includes(file.type));
+
+    // Replace spaces with underscores in file names
+    const processedFiles = files.map((file) => {
+      const newName = file.name.replace(/ /g, "_");
+      return new File([file], newName, { type: file.type });
+    });
+
+    const validFiles = processedFiles.filter((file) =>
+      allowedTypes.includes(file.type)
+    );
     if (validFiles.length === 0) {
       alert("Only JPG, PNG, and PDF files are allowed.");
       setShowUploadProcess(false);
@@ -61,19 +72,32 @@ export default function FileUpload({
     }
     setShowUploadProcess(true);
     setProgress({ current: 0, total: files.length, percent: 0 });
-
-    for (let i = 0; i < files.length; i++) {
-      await uploadFileWithProgress(files[i], (percent) => {
+    const batchResults: UploadedFileInfo[] = [];
+    for (let i = 0; i < validFiles.length; i++) {
+      const result = await uploadFileWithProgress(validFiles[i], (percent) => {
         setProgress({
           current: i + (percent === 100 ? 1 : 0),
-          total: files.length,
-          percent: Math.round(((i + percent / 100) / files.length) * 100),
+          total: validFiles.length,
+          percent: Math.round(((i + percent / 100) / validFiles.length) * 100),
         });
       });
+      batchResults.push(result);
     }
 
+    setFileuploaded((prev) => {
+      const merged = [...prev, ...batchResults];
+      const deduped = Array.from(
+        new Map(merged.map((f) => [f.file_id, f])).values()
+      );
+      localStorage.setItem(
+        "fileuploaded",
+        JSON.stringify(deduped.map((f) => f.file_id))
+      );
+      return deduped;
+    });
+
     if (onUploadComplete) {
-      onUploadComplete(files);
+      onUploadComplete(validFiles);
     }
 
     setShowUploadProcess(false);
@@ -134,7 +158,7 @@ export default function FileUpload({
                 <>
                   ទាញនិងទម្លាក់ឯកសាររបស់អ្នកនៅទីនេះ ឬចុចដើម្បីរុករក
                   <br />
-                  ឯកសារដែលអនុញ្ញាតិ៖ JPG, PNG, PDF | ទំហំអតិបរមា៖ 10MB
+                  ឯកសារដែលអនុញ្ញាតិ៖ JPG, PNG, JPEG | ទំហំអតិបរមា៖ 10MB
                 </>
               )}
             </p>
@@ -144,7 +168,7 @@ export default function FileUpload({
                 ref={fileInputRef}
                 className="hidden"
                 multiple
-                accept=".jpg,.jpeg,.png,application/pdf,image/jpeg,image/png"
+                accept=".jpg,.jpeg,.png,image/jpg, image/jpeg,image/png"
                 onChange={handleFileChange}
               />
               <Button

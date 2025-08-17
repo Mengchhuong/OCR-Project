@@ -34,3 +34,6 @@ uvicorn==0.34.3
 watchfiles==1.0.5
 websockets==15.0.1
 supabase
+pydantic-settings
+google.generativeai
+pillow

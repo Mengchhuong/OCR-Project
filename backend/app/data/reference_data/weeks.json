@@ -1,0 +1,32 @@
+{
+  "weeks": [
+    {
+      "name": "monday",
+      "value": "ច័ន្ទ"
+    },
+    {
+      "name": "tuesday",
+      "value": "អង្គារ"
+    },
+    {
+      "name": "wednesday",
+      "value": "ពុធ"
+    },
+    {
+      "name": "thursday",
+      "value": "ព្រហស្បតិ៍"
+    },
+    {
+      "name": "friday",
+      "value": "សុក្រ"
+    },
+    {
+      "name": "saturday",
+      "value": "សៅរ៍"
+    },
+    {
+      "name": "sunday",
+      "value": "អាទិត្យ"
+    }
+  ]
+}

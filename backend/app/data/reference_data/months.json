@@ -1,0 +1,52 @@
+{
+  "months": [
+    {
+      "name": "january",
+      "value": "មករា"
+    },
+    {
+      "name": "february",
+      "value": "កុម្ភៈ"
+    },
+    {
+      "name": "march",
+      "value": "មីនា"
+    },
+    {
+      "name": "april",
+      "value": "មេសា"
+    },
+    {
+      "name": "may",
+      "value": "ឧសភា"
+    },
+    {
+      "name": "june",
+      "value": "មិថុនា"
+    },
+    {
+      "name": "july",
+      "value": "កក្កដា"
+    },
+    {
+      "name": "august",
+      "value": "សីហា"
+    },
+    {
+      "name": "september",
+      "value": "កញ្ញា"
+    },
+    {
+      "name": "october",
+      "value": "តុលា"
+    },
+    {
+      "name": "november",
+      "value": "វិច្ឆិកា"
+    },
+    {
+      "name": "december",
+      "value": "ធ្នូ"
+    }
+  ]
+}

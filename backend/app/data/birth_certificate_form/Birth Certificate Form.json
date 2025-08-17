@@ -1,0 +1,419 @@
+{
+  "_via_settings": {
+    "ui": {
+      "annotation_editor_height": 25,
+      "annotation_editor_fontsize": 0.8,
+      "leftsidebar_width": 18,
+      "image_grid": {
+        "img_height": 80,
+        "rshape_fill": "none",
+        "rshape_fill_opacity": 0.3,
+        "rshape_stroke": "yellow",
+        "rshape_stroke_width": 2,
+        "show_region_shape": true,
+        "show_image_policy": "all"
+      },
+      "image": {
+        "region_label": "class_label",
+        "region_color": "type",
+        "region_label_font": "10px Sans",
+        "on_image_annotation_editor_placement": "NEAR_REGION"
+      }
+    },
+    "core": { "buffer_size": 18, "filepath": {}, "default_filepath": "" },
+    "project": { "name": "Birth Certificate Form" }
+  },
+  "_via_img_metadata": {
+    "birth_certificate_form.jpg543969": {
+      "filename": "birth_certificate_form.jpg",
+      "size": 543969,
+      "regions": [
+        {
+          "shape_attributes": {
+            "name": "rect",
+            "x": 430,
+            "y": 397,
+            "width": 450,
+            "height": 89
+          },
+          "region_attributes": { "class_label": "city" }
+        },
+        {
+          "shape_attributes": {
+            "name": "rect",
+            "x": 474,
+            "y": 488,
+            "width": 410,
+            "height": 75
+          },
+          "region_attributes": { "class_label": "district" }
+        },
+        {
+          "shape_attributes": {
+            "name": "rect",
+            "x": 418,
+            "y": 570,
+            "width": 497,
+            "height": 68
+          },
+          "region_attributes": { "class_label": "commune" }
+        },
+        {
+          "shape_attributes": {
+            "name": "rect",
+            "x": 1558,
+            "y": 408,
+            "width": 385,
+            "height": 66
+          },
+          "region_attributes": { "class_label": "certificate_number" }
+        },
+        {
+          "shape_attributes": {
+            "name": "rect",
+            "x": 1797,
+            "y": 481,
+            "width": 274,
+            "height": 73
+          },
+          "region_attributes": { "class_label": "doc_number" }
+        },
+        {
+          "shape_attributes": {
+            "name": "rect",
+            "x": 1534,
+            "y": 558,
+            "width": 432,
+            "height": 82
+          },
+          "region_attributes": { "class_label": "certificate_year" }
+        },
+        {
+          "shape_attributes": {
+            "name": "rect",
+            "x": 773,
+            "y": 755,
+            "width": 1038,
+            "height": 70
+          },
+          "region_attributes": { "class_label": "last_name" }
+        },
+        {
+          "shape_attributes": {
+            "name": "rect",
+            "x": 773,
+            "y": 848,
+            "width": 1038,
+            "height": 67
+          },
+          "region_attributes": { "class_label": "first_name" }
+        },
+        {
+          "shape_attributes": {
+            "name": "rect",
+            "x": 771,
+            "y": 934,
+            "width": 1256,
+            "height": 70
+          },
+          "region_attributes": { "class_label": "last_name_latin" }
+        },
+        {
+          "shape_attributes": {
+            "name": "rect",
+            "x": 773,
+            "y": 1023,
+            "width": 1256,
+            "height": 64
+          },
+          "region_attributes": { "class_label": "first_name_latin" }
+        },
+        {
+          "shape_attributes": {
+            "name": "rect",
+            "x": 1834,
+            "y": 828,
+            "width": 199,
+            "height": 89
+          },
+          "region_attributes": { "class_label": "gender" }
+        },
+        {
+          "shape_attributes": {
+            "name": "rect",
+            "x": 769,
+            "y": 1113,
+            "width": 1257,
+            "height": 67
+          },
+          "region_attributes": { "class_label": "nationality" }
+        },
+        {
+          "shape_attributes": {
+            "name": "rect",
+            "x": 773,
+            "y": 1198,
+            "width": 1251,
+            "height": 72
+          },
+          "region_attributes": { "class_label": "dob" }
+        },
+        {
+          "shape_attributes": {
+            "name": "rect",
+            "x": 768,
+            "y": 1289,
+            "width": 1259,
+            "height": 216
+          },
+          "region_attributes": { "class_label": "pob" }
+        },
+        {
+          "shape_attributes": {
+            "name": "rect",
+            "x": 769,
+            "y": 1615,
+            "width": 621,
+            "height": 70
+          },
+          "region_attributes": { "class_label": "father_name" }
+        },
+        {
+          "shape_attributes": {
+            "name": "rect",
+            "x": 1409,
+            "y": 1614,
+            "width": 621,
+            "height": 73
+          },
+          "region_attributes": { "class_label": "mother_name" }
+        },
+        {
+          "shape_attributes": {
+            "name": "rect",
+            "x": 766,
+            "y": 1705,
+            "width": 626,
+            "height": 69
+          },
+          "region_attributes": { "class_label": "father_name_latin" }
+        },
+        {
+          "shape_attributes": {
+            "name": "rect",
+            "x": 1407,
+            "y": 1706,
+            "width": 619,
+            "height": 69
+          },
+          "region_attributes": { "class_label": "mother_name_latin" }
+        },
+        {
+          "shape_attributes": {
+            "name": "rect",
+            "x": 768,
+            "y": 1792,
+            "width": 624,
+            "height": 72
+          },
+          "region_attributes": { "class_label": "father_nationality" }
+        },
+        {
+          "shape_attributes": {
+            "name": "rect",
+            "x": 1407,
+            "y": 1791,
+            "width": 622,
+            "height": 72
+          },
+          "region_attributes": { "class_label": "mother_nationality" }
+        },
+        {
+          "shape_attributes": {
+            "name": "rect",
+            "x": 766,
+            "y": 1880,
+            "width": 626,
+            "height": 73
+          },
+          "region_attributes": { "class_label": "father_dob" }
+        },
+        {
+          "shape_attributes": {
+            "name": "rect",
+            "x": 1407,
+            "y": 1892,
+            "width": 622,
+            "height": 59
+          },
+          "region_attributes": { "class_label": "mother_dob" }
+        },
+        {
+          "shape_attributes": {
+            "name": "rect",
+            "x": 765,
+            "y": 1969,
+            "width": 627,
+            "height": 222
+          },
+          "region_attributes": { "class_label": "father_pob" }
+        },
+        {
+          "shape_attributes": {
+            "name": "rect",
+            "x": 1409,
+            "y": 1966,
+            "width": 624,
+            "height": 225
+          },
+          "region_attributes": { "class_label": "mother_pob" }
+        },
+        {
+          "shape_attributes": {
+            "name": "rect",
+            "x": 762,
+            "y": 2200,
+            "width": 1270,
+            "height": 249
+          },
+          "region_attributes": { "class_label": "first_pob_baby" }
+        },
+        {
+          "shape_attributes": {
+            "name": "rect",
+            "x": 1029,
+            "y": 2472,
+            "width": 305,
+            "height": 52
+          },
+          "region_attributes": { "class_label": "created_place" }
+        },
+        {
+          "shape_attributes": {
+            "name": "rect",
+            "x": 1418,
+            "y": 2469,
+            "width": 127,
+            "height": 56
+          },
+          "region_attributes": { "class_label": "created_date" }
+        },
+        {
+          "shape_attributes": {
+            "name": "rect",
+            "x": 1601,
+            "y": 2469,
+            "width": 161,
+            "height": 63
+          },
+          "region_attributes": { "class_label": "create_month" }
+        },
+        {
+          "shape_attributes": {
+            "name": "rect",
+            "x": 1817,
+            "y": 2468,
+            "width": 208,
+            "height": 64
+          },
+          "region_attributes": { "class_label": "create_year" }
+        },
+        {
+          "shape_attributes": {
+            "name": "rect",
+            "x": 1326,
+            "y": 2630,
+            "width": 374,
+            "height": 72
+          },
+          "region_attributes": { "class_label": "created_by" }
+        },
+        {
+          "shape_attributes": {
+            "name": "rect",
+            "x": 1326,
+            "y": 2785,
+            "width": 388,
+            "height": 120
+          },
+          "region_attributes": { "class_label": "signature" }
+        }
+      ],
+      "file_attributes": {}
+    }
+  },
+  "_via_attributes": {
+    "region": {
+      "class_label": {
+        "type": "dropdown",
+        "description": "",
+        "options": {
+          "region": "Region",
+          "city": "City",
+          "district": "District",
+          "commune": "Commune",
+          "title": "Title",
+          "certificate_number": "Certificate Number",
+          "certificate_year": "Certificate Year",
+          "first_name": "First Name",
+          "last_name": "Last Name",
+          "first_name_latin": "First Name (Latin)",
+          "last_name_latin": "Last Name (Latin)",
+          "nationality": "Nationality",
+          "dob": "Date of Birth",
+          "pob": "Place of Birth",
+          "father": "Father",
+          "mother": "Mother",
+          "parent_name": "Parent Name",
+          "created_place": "Created Place",
+          "logo": "Logo",
+          "country": "Country",
+          "motto": "Motto",
+          "gender": "Gender",
+          "latin": "Latin Name",
+          "parent": "Parent",
+          "father_name": "Father's Name",
+          "mother_name": "Mother's Name",
+          "father_name_latin": "Father's Name (Latin)",
+          "mother_name_latin": "Mother's Name (Latin)",
+          "father_nationality": "Father's Nationality",
+          "mother_nationality": "Mother's Nationality",
+          "father_dob": "Father's Date of Birth",
+          "mother_dob": "Mother's Date of Birth",
+          "father_pob": "Father's Place of Birth",
+          "mother_pob": "Mother's Place of Birth",
+          "first_pob_baby": "Baby's First Place of Birth",
+          "created_by": "Created By",
+          "signature": "Signature",
+          "signature_name": "Signature Name",
+          "seal": "Seal",
+          "doc_number": "Document Number",
+          "created_date": "Created Date",
+          "create_month": "Created Month",
+          "create_year": "Created Year"
+        },
+        "default_options": {}
+      },
+      "type": {
+        "type": "radio",
+        "description": "",
+        "options": {
+          "handwritten": "Handwritten",
+          "digital": "Digital",
+          "image": "Image",
+          "seal": "Seal"
+        },
+        "default_options": { "digital": true }
+      },
+      "image_quality": {
+        "type": "radio",
+        "description": "",
+        "options": { "blur": "Blur", "good": "Good" },
+        "default_options": {}
+      }
+    },
+    "file": {}
+  },
+  "_via_data_format_version": "2.0.10",
+  "_via_image_id_list": ["birth_certificate_form.jpg543969"]
+}
