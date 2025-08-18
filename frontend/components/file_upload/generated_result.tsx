@@ -41,11 +41,13 @@ export default function GeneratedResult({
     text: string;
     image_url?: string;
     filename: string;
+    file_id: string;
   } | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonGroupRef = useRef<HTMLDivElement>(null);
   const [dropdownWidth, setDropdownWidth] = useState<number>(0);
+  const [extract_text, setExtractText] = useState<JSON | null>(null);
   const { language } = useLanguage();
 
   useLayoutEffect(() => {
@@ -72,6 +74,7 @@ export default function GeneratedResult({
     return (
       <DetailResult
         DetailText={detail.text}
+        FileID={detail.file_id}
         Image_url={detail.image_url}
         FileTitle={detail.filename}
         onBack={() => setDetail(null)}
@@ -87,6 +90,7 @@ export default function GeneratedResult({
           text: "No file id found for this row.",
           image_url: row.image_url,
           filename: row.filename,
+          file_id: row.file_id,
         });
         return;
       }
@@ -97,6 +101,7 @@ export default function GeneratedResult({
           text: "Extracted JSON is not available for this file.",
           image_url: row.image_url,
           filename: row.filename,
+          file_id: row.file_id,
         });
         return;
       }
@@ -107,6 +112,7 @@ export default function GeneratedResult({
           text: `Failed to fetch extracted JSON (status ${res.status}).`,
           image_url: row.image_url,
           filename: row.filename,
+          file_id: row.file_id,
         });
         return;
       }
@@ -118,16 +124,103 @@ export default function GeneratedResult({
         text: formattedText,
         image_url: row.image_url,
         filename: row.filename,
+        file_id: row.file_id,
       });
+
+      setExtractText(jsonData);
     } catch (err) {
       console.error("Failed to fetch JSON:", err);
       setDetail({
         text: "An error occurred while fetching the extracted JSON.",
         image_url: row.image_url,
         filename: row.filename,
+        file_id: row.file_id,
       });
     }
   };
+
+  const onDownloadClick = async (row: (typeof data)[0]) => {
+    try {
+      const fileId = row.file_id;
+      const extract_json_url = await get_extract_json_url(fileId);
+
+      const res = await fetch(extract_json_url.toString());
+      if (!res.ok) {
+        console.error(`Failed to fetch extracted JSON (status ${res.status}).`);
+        return;
+      }
+      const filename = cleanFileName(row.filename);
+      const jsonData = await res.json();
+      const blob = new Blob([JSON.stringify(jsonData, null, 2)], {
+        type: "application/json",
+      });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${filename}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Failed to fetch JSON:", err);
+    }
+  };
+
+  const onSelectDownload = async (row: (typeof data)[0], type: string) => {
+    const fileId = row.file_id;
+    if (!fileId) {
+      console.error("No file id found for this row.");
+      return;
+    }
+
+    const extract_json_url = await get_extract_json_url(fileId);
+    if (!extract_json_url) {
+      console.error("Extracted JSON is not available for this file.");
+      return;
+    }
+
+    const res = await fetch(extract_json_url.toString());
+    if (!res.ok) {
+      console.error(`Failed to fetch extracted JSON (status ${res.status}).`);
+      return;
+    }
+
+    const jsonData = await res.json();
+    if (type == "json") {
+      const blob = new Blob([JSON.stringify(jsonData, null, 2)], {
+        type: "application/json",
+      });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${cleanFileName(row.filename)}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } else {
+      const blob = new Blob([JSON.stringify(jsonData, null, 2)], {
+        type: "text/plain",
+      });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${cleanFileName(row.filename)}.txt`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    }
+  };
+
+  function cleanFileName(filename: string): string {
+    return filename
+      .replace(/\.[^/.]+$/, "")
+      .replace(/\s+/g, "_")
+      .replace(/[^a-zA-Z0-9_-]/g, "");
+  }
+
   function formatExtractedText(extractedText: any[]) {
     if (!extractedText || extractedText.length === 0) return "No data found.";
 
@@ -182,6 +275,18 @@ export default function GeneratedResult({
     setSelected((prev) =>
       prev.includes(idx) ? prev.filter((i) => i !== idx) : [...prev, idx]
     );
+  };
+
+  const handleBatchDownload = async (type: "txt" | "json") => {
+    if (selected.length === 0) {
+      alert("Please select at least one file to download.");
+      return;
+    }
+
+    for (const idx of selected) {
+      const row = data[idx];
+      await onSelectDownload(row, type);
+    }
   };
 
   return (
@@ -252,7 +357,7 @@ export default function GeneratedResult({
                     aria-label="Download"
                     onClick={(e) => {
                       e.stopPropagation();
-                      alert(`Downloading ${row.filename}`);
+                      onDownloadClick(row);
                     }}
                   >
                     <Download className="w-5 h-5" />
@@ -271,7 +376,9 @@ export default function GeneratedResult({
               variant="default"
               size={"icon"}
               type="button"
-              onClick={() => {}}
+              onClick={() => {
+                handleBatchDownload("txt");
+              }}
             >
               <Download className="mr-1 w-9 h-9 stroke-3"></Download>
               {language == "en" ? "Download .txt" : "ទាញយក .txt"}
@@ -298,13 +405,17 @@ export default function GeneratedResult({
               <div className="flex flex-col">
                 <span
                   className="p-2 text-center dark:hover:duration-500 dark:hover:bg-[#142544]  hover:bg-[#FF4438] duration-500 font-bold hover:text-white cursor-pointer rounded-t-2xl"
-                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  onClick={() => {
+                    setDropdownOpen(!dropdownOpen), handleBatchDownload("txt");
+                  }}
                 >
                   {language == "en" ? "Download .txt" : "ទាញយក .txt"}
                 </span>
                 <span
                   className="p-2 text-center dark:hover:duration-500 dark:hover:bg-[#142544]  hover:bg-[#FF4438] duration-500 font-bold hover:text-white cursor-pointer rounded-b-2xl"
-                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  onClick={() => {
+                    setDropdownOpen(!dropdownOpen), handleBatchDownload("json");
+                  }}
                 >
                   {language == "en" ? "Download .json" : "ទាញយក .json"}
                 </span>

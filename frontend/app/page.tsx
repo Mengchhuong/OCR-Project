@@ -151,6 +151,20 @@ export default function Home() {
                             setLocalFiles((prev) =>
                               prev.filter((_, i) => i !== idx)
                             );
+                            // localStorage.setItem(
+                            //   "fileuploaded",
+                            //   JSON.stringify(deduped.map((f) => f.file_id))
+                            // );
+                            const batchUploaded =
+                              localStorage.getItem("fileuploaded") || "";
+                            const batchResults =
+                              JSON.parse(batchUploaded) || [];
+                            console.log("Batch Results:", batchResults);
+                            batchResults.splice(idx, 1);
+                            localStorage.setItem(
+                              "fileuploaded",
+                              JSON.stringify(batchResults)
+                            );
                           }}
                           className="text-gray-500 w-9 h-9 hover:bg-gray-300 flex items-center justify-center rounded-full cursor-pointer duration-500"
                         >

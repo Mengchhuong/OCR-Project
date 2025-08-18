@@ -152,7 +152,7 @@ export default function FileUpload({
                 <>
                   Drag and drop your file here, or click to browse
                   <br />
-                  Supported formats: JPG, PNG, PDF | Max size: 10MB
+                  Supported formats: JPG, PNG, JPEG | Max size: 10MB
                 </>
               ) : (
                 <>

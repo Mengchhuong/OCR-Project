@@ -1,6 +1,6 @@
 from typing import List
 import google.generativeai as genai
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from supabase import create_client, Client
 import os
 import logging
@@ -111,7 +111,7 @@ async def generate_ocr(file_id: str):
         
         """Change file location from temp to uploaded"""
         await change_file_upload(file_id)
-
+        await delete_all_temp_files()
 
         file_row = await get_image(file_id)
         if not file_row or "file_path" not in file_row:
@@ -403,6 +403,37 @@ async def movebackfile(file_id: str):
         logger.error(f"Failed {file_id} moved failed: {e}")
         return {"status": "error", "file_id": file_id, "error": str(e)}
 
+async def delete_all_temp_files():
+    """Deletes all temporary files from the temp bucket older than 1 day."""
+    try:
+        one_day_ago = datetime.utcnow().replace(tzinfo=timezone.utc) - timedelta(days=1)
+        storage = supabase_client.storage.from_(SUPABASE_BUCKET_TEMP_UPLOADS)
+        files = storage.list()
+        deleted_files = 0
+
+        for file in files:
+            # Supabase file info contains 'name' and optionally 'created_at'
+            file_name = file.get("name")
+            file_created_at_str = file.get("created_at")  # may be None
+            if not file_name:
+                continue
+
+            # Check if the file is older than 1 day
+            if file_created_at_str:
+                file_created_at = datetime.fromisoformat(file_created_at_str.replace("Z", "+00:00"))
+                if file_created_at > one_day_ago:
+                    continue  # Skip files newer than 1 day
+
+            # Remove the file
+            storage.remove([file_name])
+            deleted_files += 1
+
+        logger.info(f"Deleted {deleted_files} temporary files successfully.")
+        return {"status": "success", "deleted_files": deleted_files}
+
+    except Exception as e:
+        logger.error(f"Failed to delete temporary files: {e}")
+        return {"status": "error", "error": str(e)}
 async def movebackfiles(file_ids: List[str]):
     """Moves multiple files from temp bucket to uploads bucket."""
     result = []

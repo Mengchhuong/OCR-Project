@@ -10,14 +10,17 @@ import {
 import { Button } from "../ui/button";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useLanguage } from "@/context/LanguageContext";
+import { get_extract_json_url } from "@/lib/api";
 
 export default function DetailResult({
   FileTitle,
+  FileID,
   DetailText = " ប្រទេសកម្ពុជា មានប្រវត្តិសាស្ត្រដ៏យូរលង់ ហើយមានអរិយធម៌ដ៏រុងរឿង។ខ្ញុំសូមជូនពរឱ្យអ្នកទាំងអស់គ្នាមានសុខភាពល្អ និងសុភមង្គលគ្រប់ពេលវេលា។ប្រាសាទអង្គរវត្ត គឺជានិមិត្តរូបនៃប្រទេសកម្ពុជានិងជាសំណង់ស្ថាបត្យកម្មដ៏អស្ចារ្យបំផុតមួយនៅលើពិភពលោក។",
   Image_url,
   onBack,
 }: {
   FileTitle?: string;
+  FileID?: string;
   Image_url?: string;
   DetailText?: string;
   onBack?: () => void;
@@ -35,6 +38,108 @@ export default function DetailResult({
     }
   }, [dropdownOpen]);
 
+  const onSelectDownload = async (
+    filename: string,
+    file_id: string,
+    type: string
+  ) => {
+    const fileId = file_id;
+    if (!fileId) {
+      console.error("No file id found for this row.");
+      return;
+    }
+
+    const extract_json_url = await get_extract_json_url(fileId);
+    if (!extract_json_url) {
+      console.error("Extracted JSON is not available for this file.");
+      return;
+    }
+
+    const res = await fetch(extract_json_url.toString());
+    if (!res.ok) {
+      console.error(`Failed to fetch extracted JSON (status ${res.status}).`);
+      return;
+    }
+
+    const jsonData = await res.json();
+    if (type == "json") {
+      const blob = new Blob([JSON.stringify(jsonData, null, 2)], {
+        type: "application/json",
+      });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${cleanFileName(filename)}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } else {
+      const blob = new Blob([JSON.stringify(jsonData, null, 2)], {
+        type: "text/plain",
+      });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${cleanFileName(filename)}.txt`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    }
+  };
+  function cleanFileName(filename: string): string {
+    return filename
+      .replace(/\.[^/.]+$/, "")
+      .replace(/\s+/g, "_")
+      .replace(/[^a-zA-Z0-9_-]/g, "");
+  }
+
+  function formatExtractedText(extractedText: any[]) {
+    if (!extractedText || extractedText.length === 0) return "No data found.";
+
+    const item = extractedText[0];
+    return `
+<b>ខេត្ត ក្រុង:</b>: ${item.city}
+<b>ស្រុក ខណ្ឌ:</b> ${item.district}
+<b>ឃុំ សង្កាត់:</b> ${item.commune}
+
+<b>លេខ:</b> ${item.certificate_number} 
+<b>សៀវភៅបញ្ជាក់កំណើតលេខ:</b> ${item.doc_number} 
+<b>ឆ្នាំ:</b> ${item.certificate_year}
+
+<b>នាមត្រកូល:</b> ${item.last_name}
+<b>នាមខ្លួនអ្នកកើត:</b> ${item.first_name}
+<b>ភេទ:</b> ${item.gender}
+<b>សញ្ជាតិ:</b> ${item.nationality}
+<b>ថ្ងៃខែឆ្នាំកំណើត:</b> ${item.dob}
+<b>ទីកន្លែងកំណើត:</b> ${item.pob}
+
+<b>+ ជាឡាតាំង</b>
+<b>នាមត្រកូល:</b> ${item.last_name_latin}
+<b>នាមខ្លួន:</b> ${item.first_name_latin}
+
+<b>+ ឪពុក:</b>
+<b>ឈ្មោះ:</b> ${item.father_name}
+<b>ឈ្មោះឡាតាំង:</b> ${item.father_name_latin}
+<b>សញ្ជាតិ:</b> ${item.father_nationality}
+<b>ថ្ងែ ខែ ឆ្នាំ កំណើត:</b> ${item.father_dob}
+<b>ទីកន្លែងកំណើត:</b> ${item.father_pob}
+
+<b>+ ម្តាយ:</b>
+<b>ឈ្មោះ:</b> ${item.mother_name} 
+<b>ឈ្មោះឡាតាំង:</b> ${item.mother_name_latin}
+<b>សញ្ជាតិ:</b> ${item.mother_nationality}
+<b>ថ្ងែ ខែ ឆ្នាំ កំណើត:</b> ${item.mother_dob}
+<b>ទីកន្លែងកំណើត:</b> ${item.mother_pob}
+
+<b>ទីលំនៅពេលទារកកើត:</b> ${item.first_pob_baby}
+
+<b>ធ្វើនៅ:</b> ${item.created_place}, <b>ថ្ងែទី:</b> ${item.created_date} <b>ខែ:</b> ${item.create_month} <b>ឆ្នាំ:</b> ${item.create_year}
+<b>មន្ត្រីអត្រានុកូលដ្ឋាន:</b> ${item.created_by}
+<b>ហត្ថលេខា:</b> ${item.signature}
+  `.trim();
+  }
   useEffect(() => {
     if (!dropdownOpen) return;
     function handleClickOutside(event: MouseEvent) {
@@ -114,7 +219,9 @@ export default function DetailResult({
               variant="default"
               size={"icon"}
               type="button"
-              onClick={() => {}}
+              onClick={() => {
+                onSelectDownload(FileTitle || "result", FileID || "", "txt");
+              }}
             >
               <Download className="mr-1 w-9 h-9 stroke-3"></Download>
               {language == "en" ? "Download .txt" : "ទាញយក .txt"}
@@ -144,13 +251,27 @@ export default function DetailResult({
               <div className="flex flex-col">
                 <span
                   className="p-2 text-center dark:hover:duration-500 dark:hover:bg-[#142544]  hover:bg-[#FF4438] duration-500 font-bold hover:text-white cursor-pointer rounded-t-2xl"
-                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  onClick={() => {
+                    setDropdownOpen(!dropdownOpen),
+                      onSelectDownload(
+                        FileTitle || "result",
+                        FileID || "",
+                        "txt"
+                      );
+                  }}
                 >
                   {language == "en" ? "Download .txt" : "ទាញយក .txt"}
                 </span>
                 <span
                   className="p-2 text-center dark:hover:duration-500 dark:hover:bg-[#142544]  hover:bg-[#FF4438] duration-500 font-bold hover:text-white cursor-pointer rounded-b-2xl"
-                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  onClick={() => {
+                    setDropdownOpen(!dropdownOpen),
+                      onSelectDownload(
+                        FileTitle || "result",
+                        FileID || "",
+                        "json"
+                      );
+                  }}
                 >
                   {language == "en" ? "Download .json" : "ទាញយក .json"}
                 </span>
