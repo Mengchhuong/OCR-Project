@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Navbar from "@/components/shared/navbar";
+import Image from "next/image";
 import Footer from "@/components/shared/footer";
 import GeneratedResult from "@/components/file_upload/generated_result";
 import FileUpload from "@/components/file_upload/file_upload";
@@ -199,17 +200,20 @@ export default function Home() {
                 className="absolute top-2 right-2 text-xl"
                 onClick={() => setPreviewFile(null)}
               >
-                <X className="w-6 h-6 m-3 stroke-3 text-[#142544] dark:text-white hover:text-gray-800" />
+                <X className="w-6 h-6 m-3 stroke-3 text-[#142544] dark:text-white hover:text-gray-800 cursor-pointer" />
               </button>
               <h2 className="text-lg font-bold mb-4 w-[90%]">
                 {previewFile.name}
               </h2>
               {previewFile.type.startsWith("image/") ? (
-                <img
-                  src={URL.createObjectURL(previewFile)}
-                  alt={previewFile.name}
-                  className="max-w-full max-h-[75vh] mx-auto"
-                />
+                <div className="relative w-full h-[75vh]">
+                  <Image
+                    src={URL.createObjectURL(previewFile)}
+                    alt={previewFile.name}
+                    fill
+                    className="object-contain"
+                  />
+                </div>
               ) : previewFile.type === "application/pdf" ? (
                 <iframe
                   src={URL.createObjectURL(previewFile)}
