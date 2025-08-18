@@ -47,9 +47,9 @@ export default function Home() {
 
     const fileGenerated = await generateOCR((percent) => {
       setProgress({
-        current: 1 + (percent === 100 ? 1 : 0),
+        current: 1, // always 1 file being processed since batchResults is 1
         total: localFiles.length,
-        percent: Math.round(((1 + percent / 100) / localFiles.length) * 100),
+        percent: Math.min(Math.round(percent), 100), // cap at 100%
       });
     }, batchResults);
 
