@@ -24,7 +24,7 @@ type GeneratedFileInfo = {
 
 export default function Home() {
   const [localFiles, setLocalFiles] = useState<File[]>([]);
-  const [showUploadProcess, setShowUploadProcess] = useState(false);
+  const [showGenerateProcess, setShowGenerateProcess] = useState(false);
   const [showResult, setShowResult] = useState(false);
   const [fileGenerated, setFileGenerated] = useState<GeneratedFileInfo[]>([]);
   let batchUploaded: string;
@@ -41,7 +41,7 @@ export default function Home() {
   }, []);
 
   const handleGenerateOCR = async () => {
-    setShowUploadProcess(true);
+    setShowGenerateProcess(true);
 
     batchUploaded = localStorage.getItem("fileuploaded") || "";
     const batchResults = JSON.parse(batchUploaded) || [];
@@ -72,7 +72,7 @@ export default function Home() {
       percent: 100,
     });
 
-    setShowUploadProcess(false);
+    setShowGenerateProcess(false);
     setShowResult(true);
 
     // Reset local progress for next run
@@ -240,7 +240,7 @@ export default function Home() {
         </div>
 
         {/* Upload Process */}
-        {showUploadProcess && (
+        {showGenerateProcess && (
           <UploadProcess
             fromGeneratedResult={true}
             current={progress.current}
