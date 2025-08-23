@@ -5,7 +5,7 @@ class Generated(BaseModel):
     file_name: str
     file_id: str
     extract_detail: str
-    confidence: float
+    confidence: str
     image_url: Optional[str] = None
 
 class GeneratedList(BaseModel):

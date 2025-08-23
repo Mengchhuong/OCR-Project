@@ -93,7 +93,7 @@ async def generate_ocr(file_id: str):
         "    markdown outside the JSON block, or explanations. Start your response directly with `[`.\n"
         "4.  **Accurate extraction & Formatting:** Extract the values precisely as they appear on the document. "
         "    Specifically for date fields:\n"
-        "    -   `created_date`: Extract **only the day** (e.g., \"25\", \"01\").\n"
+        "    -   `created_date`: Extract **only the day** (e.g., \"២៥\", \"០១\").\n"
         "    -   `create_month`: Extract **only the khmer month** (e.g., \"តុលា\",\"មករា\").\n"
         "    -   `create_year`: Extract **only the year** (e.g., \"2023\").\n"
         "    If the full date is present, ensure you parse it correctly into these three fields.\n"
@@ -104,6 +104,7 @@ async def generate_ocr(file_id: str):
         "6.  **Gender:** Extract as khmer language 'ប្រុស', 'ស្រី', or `\"\"` if not found.\n"
         "7.  **Signature:** Indicate if a signature is present/visible (e.g., \"Present\") or `\"\"` if not discernible.\n"
         "8.  **Confidence:** Provide a confidence score between 0 and 100 give me after extract text how many confidence that you have (e.g., \"95\",\"75\") or `\"\"` if not applicable.\n"
+        "9.  **Number:** All number that generete need to use with khmer number except confidence need use with latin number (e.g., \"៩៥\",\"៧៥\") or `\"\"` if not applicable.\n"
         "Now, process the image and provide the JSON array containing the extracted birth certificate details."
     )
 

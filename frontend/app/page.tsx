@@ -18,7 +18,7 @@ type GeneratedFileInfo = {
   file_name: string;
   file_id: string;
   extract_detail: string;
-  confidence: number;
+  confidence: string;
   image_url: string;
 };
 
@@ -26,8 +26,7 @@ export default function Home() {
   const [localFiles, setLocalFiles] = useState<File[]>([]);
   const [showGenerateProcess, setShowGenerateProcess] = useState(false);
   const [showResult, setShowResult] = useState(false);
-  const [fileGenerated, setFileGenerated] = useState<GeneratedFileInfo[]>([]);
-  let batchUploaded: string;
+  const [generatedFile, setGeneratedFile] = useState<GeneratedFileInfo[]>([]);
   const [progress, setProgress] = useState({
     current: 0,
     total: 0,
@@ -37,47 +36,69 @@ export default function Home() {
   const { language } = useLanguage();
 
   useEffect(() => {
+    const handleUnload = () => {
+      localStorage.removeItem("fileuploaded");
+    };
+
+    window.addEventListener("beforeunload", handleUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleUnload);
+    };
+  }, []);
+
+  useEffect(() => {
     document.title = "Khmer OCR";
   }, []);
 
   const handleGenerateOCR = async () => {
     setShowGenerateProcess(true);
 
-    batchUploaded = localStorage.getItem("fileuploaded") || "";
-    const batchResults = JSON.parse(batchUploaded) || [];
+    const batchUploaded = localStorage.getItem("fileuploaded");
+    let batchResults: string[] = [];
 
-    const fileGenerated = await generateOCR((percent) => {
-      setProgress({
-        current: 1, // always 1 file being processed since batchResults is 1
-        total: localFiles.length,
-        percent: Math.min(Math.round(percent), 100), // cap at 100%
-      });
-    }, batchResults);
+    try {
+      const parsed = batchUploaded ? JSON.parse(batchUploaded) : [];
+      batchResults = Array.isArray(parsed) ? parsed : [parsed];
+    } catch (e) {
+      console.error("Invalid JSON in localStorage fileuploaded:", e);
+      batchResults = [];
+    }
 
-    setFileGenerated(
-      fileGenerated.files.map((file: any) => ({
-        file_name: file.file_name,
-        file_id: file.file_id,
-        extract_detail: file.extract_detail ?? "",
-        confidence: file.confidence ?? 0,
-        image_url: file.image_url,
-      }))
-    );
-    setProgress({ current: 0, total: localFiles.length, percent: 0 });
+    if (batchResults.length === 0) {
+      setShowGenerateProcess(false);
+      return;
+    }
 
-    // Ensure progress shows 100%
+    let fileGenerated: GeneratedFileInfo[] = [];
+    let completed = 0;
+
+    for (let i = 0; i < batchResults.length; i++) {
+      try {
+        const result = await generateOCR(() => {}, batchResults[i]);
+
+        completed++;
+        setProgress({
+          current: completed,
+          total: batchResults.length,
+          percent: Math.round((completed / batchResults.length) * 100),
+        });
+
+        fileGenerated.push(result);
+      } catch (err) {
+        console.error("OCR failed for file:", batchResults[i], err);
+      }
+    }
+
     setProgress({
-      current: localFiles.length,
-      total: localFiles.length,
+      current: batchResults.length,
+      total: batchResults.length,
       percent: 100,
     });
 
     setShowGenerateProcess(false);
     setShowResult(true);
-
-    // Reset local progress for next run
-    setProgress({ current: 0, total: 0, percent: 0 });
     localStorage.removeItem("fileuploaded");
+    setGeneratedFile(fileGenerated);
   };
 
   const handleUploadComplete = (newFiles: File[]) => {
@@ -234,7 +255,7 @@ export default function Home() {
               <h2 className="text-xl font-bold mb-4">
                 {language == "en" ? "OCR Results" : "លទ្ធផល OCR"}
               </h2>
-              <GeneratedResult generatedFile={fileGenerated} />
+              <GeneratedResult generatedFile={generatedFile} />
             </div>
           )}
         </div>

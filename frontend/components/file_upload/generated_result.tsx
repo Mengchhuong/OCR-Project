@@ -18,7 +18,7 @@ type GeneratedFileInfo = {
   file_name: string;
   file_id: string;
   extract_detail: string;
-  confidence: number;
+  confidence: string;
   image_url: string;
 };
 

@@ -83,13 +83,16 @@ export default function FileUpload({
       });
       batchFiles.push(result.file_id);
     }
-    const fileUploaded = localStorage.getItem("fileuploaded");
-    const finalBatchFiles: string[] = JSON.parse(fileUploaded || "[]") || [];
-
-    if (fileUploaded != null) {
-      finalBatchFiles.push(...batchFiles.map((id: string) => id));
+    const existingRaw = localStorage.getItem("fileuploaded") || "[]";
+    let existing: string[] = [];
+    try {
+      const parsed = JSON.parse(existingRaw);
+      existing = Array.isArray(parsed) ? parsed : [];
+    } catch {
+      existing = [];
     }
 
+    const finalBatchFiles = [...existing, ...batchFiles];
     localStorage.setItem("fileuploaded", JSON.stringify(finalBatchFiles));
 
     if (onUploadComplete) {

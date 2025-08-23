@@ -45,22 +45,44 @@ export function uploadFileWithProgress(
   });
 }
 
-export function generateOCR(onProgress: (percent: number) => void, fileIds: string[]): Promise<{ files: Array<{ file_id: string; extract_detail: string; confidence: number | string; image_url: string}> }> {
+export function generateOCR(
+  onProgress: (percent: number) => void,
+  fileId: string
+): Promise<{
+  image_url: string;
+  confidence: string;
+  extract_detail: string;
+  file_id: string;
+  file_name: string;
+}> {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     const formData = new FormData();
-    fileIds.forEach((id) => formData.append("file_id", id));
+    formData.append("file_id", fileId);
+
     xhr.upload.onprogress = (event) => {
       if (event.lengthComputable) {
         const percent = Math.round((event.loaded / event.total) * 100);
         onProgress(percent);
       }
     };
+
     xhr.onload = () => {
       if (xhr.status === 200) {
         try {
           const data = JSON.parse(xhr.responseText);
-          resolve(data);
+          const file =
+            data.files && Array.isArray(data.files) && data.files.length > 0
+              ? data.files[0]
+              : data;
+
+          resolve({
+            file_id: file.file_id,
+            file_name: file.file_name,
+            extract_detail: file.extract_detail ?? "",
+            confidence: file.confidence ?? "",
+            image_url: file.image_url,
+          });
         } catch (e) {
           reject(e);
         }
