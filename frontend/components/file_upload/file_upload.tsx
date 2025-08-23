@@ -89,6 +89,7 @@ export default function FileUpload({
       const parsed = JSON.parse(existingRaw);
       existing = Array.isArray(parsed) ? parsed : [];
     } catch {
+      ``;
       existing = [];
     }
 

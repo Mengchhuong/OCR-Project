@@ -322,7 +322,7 @@ export default function GeneratedResult({
           <TableBody>
             {data.map((row, idx) => (
               <TableRow
-                key={row.filename}
+                key={row.file_id}
                 className="cursor-pointer text-center"
                 onClick={() => onFileClick(row)}
               >
