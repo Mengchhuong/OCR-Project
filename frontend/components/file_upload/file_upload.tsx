@@ -54,7 +54,7 @@ export default function FileUpload({
   };
   const handleFiles = async (files: File[]) => {
     // Only allow jpg, png, pdf
-    const allowedTypes = ["image/jpeg", "image/png", "application/pdf"];
+    const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
 
     // Replace spaces with underscores in file names
     const processedFiles = files.map((file) => {
@@ -72,7 +72,7 @@ export default function FileUpload({
     }
     setShowUploadProcess(true);
     setProgress({ current: 0, total: files.length, percent: 0 });
-    const batchResults: UploadedFileInfo[] = [];
+    const batchFiles: string[] = [];
     for (let i = 0; i < validFiles.length; i++) {
       const result = await uploadFileWithProgress(validFiles[i], (percent) => {
         setProgress({
@@ -81,20 +81,16 @@ export default function FileUpload({
           percent: Math.round(((i + percent / 100) / validFiles.length) * 100),
         });
       });
-      batchResults.push(result);
+      batchFiles.push(result.file_id);
+    }
+    const fileUploaded = localStorage.getItem("fileuploaded");
+    const finalBatchFiles: string[] = JSON.parse(fileUploaded || "[]") || [];
+
+    if (fileUploaded != null) {
+      finalBatchFiles.push(...batchFiles.map((id: string) => id));
     }
 
-    setFileuploaded((prev) => {
-      const merged = [...prev, ...batchResults];
-      const deduped = Array.from(
-        new Map(merged.map((f) => [f.file_id, f])).values()
-      );
-      localStorage.setItem(
-        "fileuploaded",
-        JSON.stringify(deduped.map((f) => f.file_id))
-      );
-      return deduped;
-    });
+    localStorage.setItem("fileuploaded", JSON.stringify(finalBatchFiles));
 
     if (onUploadComplete) {
       onUploadComplete(validFiles);

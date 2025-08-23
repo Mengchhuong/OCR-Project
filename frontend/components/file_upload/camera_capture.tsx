@@ -116,8 +116,16 @@ export default function CameraCapture({
           percent: Math.round(percent),
         });
       });
+      const batchFiles: String[] = [];
+      const fileUploaded = localStorage.getItem("fileuploaded");
+      if (fileUploaded != null) {
+        batchFiles.push(...JSON.parse(fileUploaded).map((id: string) => id));
+      }
 
-      localStorage.setItem("fileuploaded", JSON.stringify([uploaded.file_id]));
+      localStorage.setItem(
+        "fileuploaded",
+        JSON.stringify([...batchFiles, uploaded.file_id])
+      );
       onSave?.(file);
 
       // Close only after successful upload
